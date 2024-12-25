@@ -29,8 +29,55 @@ func main() {
 			http.NotFound(w, r)
 			return
 		}
+
+		// Get the current active plan (most recent one that's ongoing)
+		var activePlan models.TrainingPlan
+		err := db.QueryRow(`
+			SELECT id, name, start_date, end_date, description 
+			FROM training_plans 
+			WHERE start_date <= DATE('now') 
+			AND end_date >= DATE('now') 
+			ORDER BY start_date DESC LIMIT 1
+		`).Scan(&activePlan.ID, &activePlan.Name, &activePlan.StartDate, &activePlan.EndDate, &activePlan.Description)
+
+		data := struct {
+			ActivePlan *models.TrainingPlan
+			CurrentDay int
+			TotalDays int
+		}{nil, 0, 0}
+
+		if err == nil {
+			data.ActivePlan = &activePlan
+			data.CurrentDay = int(time.Since(activePlan.StartDate).Hours()/24) + 1
+			data.TotalDays = int(activePlan.EndDate.Sub(activePlan.StartDate).Hours()/24) + 1
+		}
+
 		tmpl := template.Must(template.ParseFiles("templates/index.html"))
-		tmpl.Execute(w, nil)
+		tmpl.Execute(w, data)
+	}))
+
+	// Handle plans listing
+	http.HandleFunc("/plans", middleware.LoggingMiddleware(func(w http.ResponseWriter, r *http.Request) {
+		rows, err := db.Query("SELECT id, name, start_date, end_date, description FROM training_plans ORDER BY start_date DESC")
+		if err != nil {
+			http.Error(w, "Failed to fetch plans", http.StatusInternalServerError)
+			return
+		}
+		defer rows.Close()
+
+		var plans []models.TrainingPlan
+		for rows.Next() {
+			var plan models.TrainingPlan
+			err := rows.Scan(&plan.ID, &plan.Name, &plan.StartDate, &plan.EndDate, &plan.Description)
+			if err != nil {
+				log.Printf("Error scanning plan row: %v", err)
+				continue
+			}
+			plans = append(plans, plan)
+		}
+
+		tmpl := template.Must(template.ParseFiles("templates/plans.html"))
+		tmpl.Execute(w, struct{ Plans []models.TrainingPlan }{plans})
 	}))
 
 	// Handle training plan form

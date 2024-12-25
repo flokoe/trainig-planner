@@ -1,0 +1,81 @@
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    line-height: 1.5;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+nav {
+    margin-top: 1rem;
+}
+
+nav a {
+    margin-right: 1rem;
+    text-decoration: none;
+    color: #0066cc;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+input[type="text"],
+input[type="date"],
+textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    background: #0066cc;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0052a3;
+}
+
+.plans-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.plan-card {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 1rem;
+}
+
+.plan-card h2 {
+    margin-top: 0;
+}
+
+.plan-card .dates {
+    color: #666;
+}
+
+.quick-stats {
+    background: #f5f5f5;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 2rem;
+}

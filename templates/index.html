@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training Tracker</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Training Tracker</h1>
+        <nav>
+            <a href="/plans">Training Plans</a>
+            <a href="/plans/new">New Plan</a>
+        </nav>
+    </header>
+    <main>
+        <section class="quick-stats">
+            <h2>Overview</h2>
+            {{if .ActivePlan}}
+                <div class="current-plan">
+                    <h3>Current Plan: {{.ActivePlan.Name}}</h3>
+                    <p>Day {{.CurrentDay}} of {{.TotalDays}}</p>
+                </div>
+            {{else}}
+                <p>No active training plan. <a href="/plans/new">Create one now</a>!</p>
+            {{end}}
+        </section>
+    </main>
+</body>
+</html>
