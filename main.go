@@ -8,6 +8,7 @@ import (
 
 	"github.com/mattn/go-sqlite3"
 	"training-tracker/internal/database"
+	"training-tracker/internal/middleware"
 	"training-tracker/internal/models"
 )
 
@@ -24,7 +25,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	// Handle main page
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/", middleware.LoggingMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {
 			http.NotFound(w, r)
 			return
@@ -34,13 +35,13 @@ func main() {
 	})
 
 	// Handle training plan form
-	http.HandleFunc("/plans/new", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/plans/new", middleware.LoggingMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		tmpl := template.Must(template.ParseFiles("templates/plan_form.html"))
 		tmpl.Execute(w, nil)
 	})
 
 	// Handle training plan creation
-	http.HandleFunc("/plans/create", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/plans/create", middleware.LoggingMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 			return
