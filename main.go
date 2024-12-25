@@ -32,13 +32,13 @@ func main() {
 		}
 		tmpl := template.Must(template.ParseFiles("templates/index.html"))
 		tmpl.Execute(w, nil)
-	})
+	}))
 
 	// Handle training plan form
 	http.HandleFunc("/plans/new", middleware.LoggingMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		tmpl := template.Must(template.ParseFiles("templates/plan_form.html"))
 		tmpl.Execute(w, nil)
-	})
+	}))
 
 	// Handle training plan creation
 	http.HandleFunc("/plans/create", middleware.LoggingMiddleware(func(w http.ResponseWriter, r *http.Request) {
@@ -55,7 +55,7 @@ func main() {
 
 		// TODO: Implement plan creation logic with database
 		http.Redirect(w, r, "/", http.StatusSeeOther)
-	})
+	}))
 
 	log.Println("Server starting on :8080...")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
