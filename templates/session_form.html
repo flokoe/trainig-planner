@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Training Session - Training Tracker</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Add Training Session</h1>
+        <nav>
+            <a href="/">Calendar</a>
+            <a href="/plans">Training Plans</a>
+        </nav>
+    </header>
+    <main>
+        <form hx-post="/sessions/create" hx-swap="outerHTML">
+            <input type="hidden" name="plan_id" value="{{.PlanID}}">
+            
+            <div class="form-group">
+                <label for="date">Session Date:</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="type">Type:</label>
+                <select id="type" name="type" required>
+                    <option value="endurance">Endurance</option>
+                    <option value="intervals">Intervals</option>
+                    <option value="recovery">Recovery</option>
+                    <option value="tempo">Tempo</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="intensity">Intensity (% HFmax):</label>
+                <input type="number" id="intensity" name="intensity" min="0" max="100" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="4"></textarea>
+            </div>
+            
+            <button type="submit">Add Session</button>
+        </form>
+    </main>
+</body>
+</html>

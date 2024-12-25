@@ -20,10 +20,8 @@ CREATE TABLE IF NOT EXISTS training_sessions (
     plan_id INTEGER NOT NULL,
     scheduled_date DATETIME NOT NULL,
     type TEXT NOT NULL,
-    target_duration INTEGER NOT NULL,
-    target_distance REAL,
     description TEXT,
-    intensity_level TEXT NOT NULL,
+    intensity INTEGER NOT NULL,
     FOREIGN KEY (plan_id) REFERENCES training_plans(id)
 );
 

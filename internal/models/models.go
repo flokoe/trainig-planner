@@ -18,11 +18,9 @@ type TrainingSession struct {
 	ID             int64     `db:"id"`
 	PlanID         int64     `db:"plan_id"`
 	ScheduledDate  time.Time `db:"scheduled_date"`
-	Type           string    `db:"type"` // e.g., endurance, intervals, recovery
-	TargetDuration int      `db:"target_duration"` // in minutes
-	TargetDistance float64  `db:"target_distance"` // in kilometers
-	Description    string    `db:"description"`
-	IntensityLevel string    `db:"intensity_level"` // e.g., low, medium, high
+	Type        string    `db:"type"` // e.g., endurance, intervals, recovery
+	Description string    `db:"description"`
+	Intensity   int       `db:"intensity"` // percentage of HFmax
 }
 
 // CompletedSession represents an actual completed workout

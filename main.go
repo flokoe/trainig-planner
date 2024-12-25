@@ -157,6 +157,78 @@ func main() {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}))
 
+	// Handle session form
+	http.HandleFunc("/plans/", middleware.LoggingMiddleware(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path[len("/plans/"):] == "new" {
+			http.ServeFile(w, r, "templates/plan_form.html")
+			return
+		}
+
+		pathParts := strings.Split(r.URL.Path, "/")
+		if len(pathParts) == 4 && pathParts[3] == "new" {
+			planID := pathParts[2]
+			tmpl := template.Must(template.ParseFiles("templates/session_form.html"))
+			tmpl.Execute(w, struct{ PlanID string }{planID})
+			return
+		}
+	}))
+
+	// Handle session creation
+	http.HandleFunc("/sessions/create", middleware.LoggingMiddleware(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+
+		err := r.ParseForm()
+		if err != nil {
+			http.Error(w, "Failed to parse form", http.StatusBadRequest)
+			return
+		}
+
+		planID := r.FormValue("plan_id")
+		dateStr := r.FormValue("date")
+		sessionType := r.FormValue("type")
+		description := r.FormValue("description")
+		intensityStr := r.FormValue("intensity")
+
+		// Parse values
+		planIDInt, err := strconv.ParseInt(planID, 10, 64)
+		if err != nil {
+			http.Error(w, "Invalid plan ID", http.StatusBadRequest)
+			return
+		}
+
+		date, err := time.Parse("2006-01-02", dateStr)
+		if err != nil {
+			http.Error(w, "Invalid date format", http.StatusBadRequest)
+			return
+		}
+
+		intensity, err := strconv.Atoi(intensityStr)
+		if err != nil {
+			http.Error(w, "Invalid intensity value", http.StatusBadRequest)
+			return
+		}
+
+		// Insert into database
+		_, err = db.Exec(
+			"INSERT INTO training_sessions (plan_id, scheduled_date, type, description, intensity) VALUES (?, ?, ?, ?, ?)",
+			planIDInt,
+			date,
+			sessionType,
+			description,
+			intensity,
+		)
+		if err != nil {
+			log.Printf("Error creating training session: %v", err)
+			http.Error(w, "Failed to create training session", http.StatusInternalServerError)
+			return
+		}
+
+		http.Redirect(w, r, "/plans", http.StatusSeeOther)
+	}))
+
 	log.Println("Server starting on :8080...")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)

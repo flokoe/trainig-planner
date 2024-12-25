@@ -53,6 +53,34 @@ button:hover {
     background: #0052a3;
 }
 
+select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.button {
+    display: inline-block;
+    background: #0066cc;
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    margin-top: 1rem;
+}
+
+.button:hover {
+    background: #0052a3;
+}
+
 .plans-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
