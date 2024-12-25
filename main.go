@@ -4,9 +4,11 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"time"
 
 	"training-tracker/internal/database"
 	"training-tracker/internal/middleware"
+	"training-tracker/internal/models"
 )
 
 func main() {
@@ -50,7 +52,61 @@ func main() {
 			return
 		}
 
-		// TODO: Implement plan creation logic with database
+		// Parse form values
+		name := r.FormValue("name")
+		startDateStr := r.FormValue("start_date")
+		endDateStr := r.FormValue("end_date")
+		description := r.FormValue("description")
+
+		// Validate required fields
+		if name == "" || startDateStr == "" || endDateStr == "" {
+			http.Error(w, "Missing required fields", http.StatusBadRequest)
+			return
+		}
+
+		// Parse dates
+		startDate, err := time.Parse("2006-01-02", startDateStr)
+		if err != nil {
+			http.Error(w, "Invalid start date format", http.StatusBadRequest)
+			return
+		}
+
+		endDate, err := time.Parse("2006-01-02", endDateStr)
+		if err != nil {
+			http.Error(w, "Invalid end date format", http.StatusBadRequest)
+			return
+		}
+
+		// Create training plan
+		plan := &models.TrainingPlan{
+			Name:        name,
+			StartDate:   startDate,
+			EndDate:     endDate,
+			Description: description,
+		}
+
+		// Insert into database
+		result, err := db.Exec(
+			"INSERT INTO training_plans (name, start_date, end_date, description) VALUES (?, ?, ?, ?)",
+			plan.Name,
+			plan.StartDate,
+			plan.EndDate,
+			plan.Description,
+		)
+		if err != nil {
+			log.Printf("Error creating training plan: %v", err)
+			http.Error(w, "Failed to create training plan", http.StatusInternalServerError)
+			return
+		}
+
+		// Get the ID of the newly created plan
+		planID, err := result.LastInsertId()
+		if err != nil {
+			log.Printf("Error getting last insert ID: %v", err)
+		} else {
+			log.Printf("Created training plan with ID: %d", planID)
+		}
+
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}))
 
