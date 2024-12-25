@@ -4,12 +4,9 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"time"
 
-	"github.com/mattn/go-sqlite3"
 	"training-tracker/internal/database"
 	"training-tracker/internal/middleware"
-	"training-tracker/internal/models"
 )
 
 func main() {
