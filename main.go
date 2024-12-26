@@ -101,7 +101,13 @@ func main() {
 		name := r.FormValue("name")
 		description := r.FormValue("description")
 
+		workoutType := r.FormValue("workout_type")
+
 		// Validate required fields
+		if name == "" || workoutType == "" {
+			http.Error(w, "Missing required fields", http.StatusBadRequest)
+			return
+		}
 		if name == "" {
 			http.Error(w, "Missing required fields", http.StatusBadRequest)
 			return
@@ -113,11 +119,27 @@ func main() {
 			Description: description,
 		}
 
-		// Insert into database
+		// Get the workout type from the plan
+		var workoutType string
+		err = db.QueryRow("SELECT workout_type FROM training_plans WHERE id = ?", planIDInt).Scan(&workoutType)
+		if err != nil {
+			http.Error(w, "Failed to get workout type", http.StatusInternalServerError)
+			return
+		}
+
+		// Handle additional fields based on workout type
+		var hfMin, hfMax int
+		if workoutType == "cycling" {
+			hfMin, _ = strconv.Atoi(r.FormValue("hf_min"))
+			hfMax, _ = strconv.Atoi(r.FormValue("hf_max"))
+		}
 		result, err := db.Exec(
 			"INSERT INTO training_plans (name, description) VALUES (?, ?)",
 			plan.Name,
 			plan.Description,
+			plan.Name,
+			plan.Description,
+			plan.WorkoutType,
 		)
 		if err != nil {
 			log.Printf("Error creating training plan: %v", err)

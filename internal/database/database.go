@@ -10,7 +10,8 @@ const Schema = `
 CREATE TABLE IF NOT EXISTS training_plans (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    description TEXT
+    description TEXT,
+    workout_type TEXT NOT NULL -- New column
 );
 
 CREATE TABLE IF NOT EXISTS training_sessions (

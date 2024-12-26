@@ -9,6 +9,7 @@ type TrainingPlan struct {
 	ID          int64  `db:"id"`
 	Name        string `db:"name"`
 	Description string `db:"description"`
+	WorkoutType string `db:"workout_type"` // New field
 }
 
 // TrainingSession represents a planned workout
