@@ -29,14 +29,18 @@
             </div>
 
             {{if eq .WorkoutType "cycling"}}
-            <div class="form-group">
-                <label for="hf_min">Heart Frequency Min:</label>
-                <input type="number" id="hf_min" name="hf_min" min="0">
-            </div>
-            <div class="form-group">
-                <label for="hf_max">Heart Frequency Max:</label>
-                <input type="number" id="hf_max" name="hf_max" min="0">
-            </div>
+                <div class="form-group">
+                    <label for="hf_min">Heart Frequency Min:</label>
+                    <input type="number" id="hf_min" name="hf_min" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="hf_max">Heart Frequency Max:</label>
+                    <input type="number" id="hf_max" name="hf_max" min="0">
+                </div>
+            {{else if eq .WorkoutType "mobility"}}
+                <!-- Add mobility-specific fields here if needed -->
+            {{else if eq .WorkoutType "weight"}}
+                <!-- Add weight-specific fields here if needed -->
             {{end}}
 
             <button type="submit">Add Session</button>

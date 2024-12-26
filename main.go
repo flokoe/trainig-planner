@@ -177,7 +177,21 @@ func main() {
 			if pathParts[4] == "new" {
 				planID := pathParts[2]
 				tmpl := template.Must(template.ParseFiles("templates/session_form.html"))
-				tmpl.Execute(w, struct{ PlanID string }{planID})
+				// Fetch the workout type for the plan
+				var workoutType string
+				err := db.QueryRow("SELECT workout_type FROM training_plans WHERE id = ?", planID).Scan(&workoutType)
+				if err != nil {
+					http.Error(w, "Failed to get workout type", http.StatusInternalServerError)
+					return
+				}
+
+				tmpl.Execute(w, struct {
+					PlanID      string
+					WorkoutType string
+				}{
+					PlanID:      planID,
+					WorkoutType: workoutType,
+				})
 				return
 			}
 		}
