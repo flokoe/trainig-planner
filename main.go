@@ -119,24 +119,15 @@ func main() {
 			Description: description,
 		}
 
-		// Get the workout type from the plan
-		var workoutType string
-		err = db.QueryRow("SELECT workout_type FROM training_plans WHERE id = ?", planIDInt).Scan(&workoutType)
-		if err != nil {
-			http.Error(w, "Failed to get workout type", http.StatusInternalServerError)
-			return
+		// Create training plan
+		plan := &models.TrainingPlan{
+			Name:        name,
+			Description: description,
+			WorkoutType: workoutType,
 		}
 
-		// Handle additional fields based on workout type
-		var hfMin, hfMax int
-		if workoutType == "cycling" {
-			hfMin, _ = strconv.Atoi(r.FormValue("hf_min"))
-			hfMax, _ = strconv.Atoi(r.FormValue("hf_max"))
-		}
 		result, err := db.Exec(
-			"INSERT INTO training_plans (name, description) VALUES (?, ?)",
-			plan.Name,
-			plan.Description,
+			"INSERT INTO training_plans (name, description, workout_type) VALUES (?, ?, ?)",
 			plan.Name,
 			plan.Description,
 			plan.WorkoutType,
