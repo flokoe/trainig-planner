@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"fmt"
 
 	"training-tracker/internal/database"
 	"training-tracker/internal/middleware"
@@ -137,20 +138,22 @@ func main() {
 
 	// Handle plan views and session form
 	http.HandleFunc("/plans/", middleware.LoggingMiddleware(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path[len("/plans/"):] == "new" {
-			http.ServeFile(w, r, "templates/plan_form.html")
-			return
-		}
+		// if r.URL.Path[len("/plans/"):] == "new" {
+		// 	http.ServeFile(w, r, "templates/plan_form.html")
+		// 	return
+		// }
 
 		pathParts := strings.Split(r.URL.Path, "/")
-		if len(pathParts) < 3 {
-			http.NotFound(w, r)
-			return
-		}
+		fmt.Println(pathParts)
+		// if len(pathParts) < 3 {
+		// 	http.NotFound(w, r)
+		// 	return
+		// }
 
 		// Handle session form
-		if len(pathParts) == 4 && pathParts[3] == "sessions" {
-			if len(pathParts) == 5 && pathParts[4] == "new" {
+		if len(pathParts) == 4 && pathParts[2] == "sessions" {
+			fmt.Println("here")
+			if pathParts[3] == "new" {
 				planID := pathParts[2]
 				tmpl := template.Must(template.ParseFiles("templates/session_form.html"))
 				tmpl.Execute(w, struct{ PlanID string }{planID})
