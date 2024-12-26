@@ -18,18 +18,27 @@
         <form action="/sessions/create" method="post">
             <input type="hidden" name="plan_id" value="{{.PlanID}}">
             
-            <div class="form-group">
+            <div id="cycling-options" class="workout-options" style="display:none;">
+                <!-- Add cycling-specific fields here -->
+            </div>
+
+            <div id="mobility-options" class="workout-options" style="display:none;">
+                <!-- Add mobility-specific fields here -->
+            </div>
+
+            <div id="weight-options" class="workout-options" style="display:none;">
+                <!-- Add weight-specific fields here -->
+            </div>
                 <label for="date">Session Date:</label>
                 <input type="date" id="date" name="date" required>
             </div>
             
             <div class="form-group">
-                <label for="type">Type:</label>
-                <select id="type" name="type" required>
-                    <option value="endurance">Endurance</option>
-                    <option value="intervals">Intervals</option>
-                    <option value="recovery">Recovery</option>
-                    <option value="tempo">Tempo</option>
+                <label for="workout">Workout:</label>
+                <select id="workout" name="workout" required onchange="showWorkoutOptions()">
+                    <option value="cycling">Cycling</option>
+                    <option value="mobility">Mobility</option>
+                    <option value="weight">Weight</option>
                 </select>
             </div>
             
@@ -41,5 +50,11 @@
             <button type="submit">Add Session</button>
         </form>
     </main>
-</body>
+<script>
+function showWorkoutOptions() {
+    const workout = document.getElementById('workout').value;
+    document.querySelectorAll('.workout-options').forEach(div => div.style.display = 'none');
+    document.getElementById(workout + '-options').style.display = 'block';
+}
+</script>
 </html>

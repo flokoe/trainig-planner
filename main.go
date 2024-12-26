@@ -232,7 +232,7 @@ func main() {
 
 		planID := r.FormValue("plan_id")
 		dateStr := r.FormValue("date")
-		sessionType := r.FormValue("type")
+		workout := r.FormValue("workout")
 		description := r.FormValue("description")
 
 		// Parse values
@@ -253,7 +253,7 @@ func main() {
 			"INSERT INTO training_sessions (plan_id, scheduled_date, type, description, intensity) VALUES (?, ?, ?, ?, ?)",
 			planIDInt,
 			date,
-			sessionType,
+			workout,
 			description,
 			0, // Default intensity to 0 since we're not using it
 		)

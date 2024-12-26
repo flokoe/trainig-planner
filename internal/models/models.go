@@ -16,7 +16,7 @@ type TrainingSession struct {
 	ID             int64     `db:"id"`
 	PlanID         int64     `db:"plan_id"`
 	ScheduledDate  time.Time `db:"scheduled_date"`
-	Type        string    `db:"type"` // e.g., endurance, intervals, recovery
+	Workout     string    `db:"workout"` // e.g., cycling, mobility, weight
 	Description string    `db:"description"`
 	Intensity   int       `db:"intensity"` // percentage of HFmax
 }
