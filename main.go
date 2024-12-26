@@ -184,7 +184,7 @@ func main() {
 
 		// Get associated sessions
 		rows, err := db.Query(`
-			SELECT id, scheduled_date, type, description, intensity 
+			SELECT id, scheduled_date, workout, description, intensity 
 			FROM training_sessions 
 			WHERE plan_id = ? 
 			ORDER BY scheduled_date`, planID)
@@ -197,7 +197,7 @@ func main() {
 		var sessions []models.TrainingSession
 		for rows.Next() {
 			var session models.TrainingSession
-			err := rows.Scan(&session.ID, &session.ScheduledDate, &session.Type, &session.Description, &session.Intensity)
+			err := rows.Scan(&session.ID, &session.ScheduledDate, &session.Workout, &session.Description, &session.Intensity)
 			if err != nil {
 				log.Printf("Error scanning session row: %v", err)
 				continue
