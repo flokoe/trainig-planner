@@ -151,9 +151,8 @@ func main() {
 		// }
 
 		// Handle session form
-		if len(pathParts) == 4 && pathParts[2] == "sessions" {
-			fmt.Println("here")
-			if pathParts[3] == "new" {
+		if len(pathParts) == 5 && pathParts[3] == "sessions" {
+			if pathParts[4] == "new" {
 				planID := pathParts[2]
 				tmpl := template.Must(template.ParseFiles("templates/session_form.html"))
 				tmpl.Execute(w, struct{ PlanID string }{planID})
