@@ -117,12 +117,6 @@ func main() {
 		plan := &models.TrainingPlan{
 			Name:        name,
 			Description: description,
-		}
-
-		// Create training plan
-		plan := &models.TrainingPlan{
-			Name:        name,
-			Description: description,
 			WorkoutType: workoutType,
 		}
 
