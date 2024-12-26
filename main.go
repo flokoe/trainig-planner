@@ -170,7 +170,7 @@ func main() {
 				tmpl := template.Must(template.ParseFiles("templates/session_form.html"))
 				// Fetch the workout type for the plan
 				var workoutType string
-				err := db.QueryRow("SELECT workout_type FROM training_plans WHERE id = ?", planID).Scan(&workoutType)
+				err = db.QueryRow("SELECT workout_type FROM training_plans WHERE id = ?", planID).Scan(&workoutType)
 				if err != nil {
 					http.Error(w, "Failed to get workout type", http.StatusInternalServerError)
 					return
