@@ -250,7 +250,7 @@ func main() {
 
 		// Insert into database
 		_, err = db.Exec(
-			"INSERT INTO training_sessions (plan_id, scheduled_date, type, description, intensity) VALUES (?, ?, ?, ?, ?)",
+			"INSERT INTO training_sessions (plan_id, scheduled_date, workout, description, intensity) VALUES (?, ?, ?, ?, ?)",
 			planIDInt,
 			date,
 			workout,
