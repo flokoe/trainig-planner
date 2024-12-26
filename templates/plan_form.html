@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Training Plan - Training Tracker</title>
-    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 <body>
@@ -16,7 +15,7 @@
         </nav>
     </header>
     <main>
-        <form hx-post="/plans/create" hx-swap="outerHTML">
+        <form action="/plans/create" method="post">
             <div class="form-group">
                 <label for="name">Plan Name:</label>
                 <input type="text" id="name" name="name" required>
