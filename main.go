@@ -230,7 +230,6 @@ func main() {
 		dateStr := r.FormValue("date")
 		sessionType := r.FormValue("type")
 		description := r.FormValue("description")
-		intensityStr := r.FormValue("intensity")
 
 		// Parse values
 		planIDInt, err := strconv.ParseInt(planID, 10, 64)
@@ -245,12 +244,6 @@ func main() {
 			return
 		}
 
-		intensity, err := strconv.Atoi(intensityStr)
-		if err != nil {
-			http.Error(w, "Invalid intensity value", http.StatusBadRequest)
-			return
-		}
-
 		// Insert into database
 		_, err = db.Exec(
 			"INSERT INTO training_sessions (plan_id, scheduled_date, type, description, intensity) VALUES (?, ?, ?, ?, ?)",
@@ -258,7 +251,7 @@ func main() {
 			date,
 			sessionType,
 			description,
-			intensity,
+			0, // Default intensity to 0 since we're not using it
 		)
 		if err != nil {
 			log.Printf("Error creating training session: %v", err)
