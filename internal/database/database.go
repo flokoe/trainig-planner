@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS training_sessions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     plan_id INTEGER NOT NULL,
     scheduled_date DATETIME NOT NULL,
-    type TEXT NOT NULL,
+    workout TEXT NOT NULL, -- Changed from type to workout
     description TEXT,
     intensity INTEGER DEFAULT 0,
     FOREIGN KEY (plan_id) REFERENCES training_plans(id)
