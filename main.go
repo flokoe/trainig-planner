@@ -35,23 +35,17 @@ func main() {
 		// Get the current active plan (most recent one that's ongoing)
 		var activePlan models.TrainingPlan
 		err := db.QueryRow(`
-			SELECT id, name, start_date, end_date, description 
+			SELECT id, name, description 
 			FROM training_plans 
-			WHERE start_date <= DATE('now') 
-			AND end_date >= DATE('now') 
-			ORDER BY start_date DESC LIMIT 1
-		`).Scan(&activePlan.ID, &activePlan.Name, &activePlan.StartDate, &activePlan.EndDate, &activePlan.Description)
+			ORDER BY id DESC LIMIT 1
+		`).Scan(&activePlan.ID, &activePlan.Name, &activePlan.Description)
 
 		data := struct {
 			ActivePlan *models.TrainingPlan
-			CurrentDay int
-			TotalDays int
-		}{nil, 0, 0}
+		}{nil}
 
 		if err == nil {
 			data.ActivePlan = &activePlan
-			data.CurrentDay = int(time.Since(activePlan.StartDate).Hours()/24) + 1
-			data.TotalDays = int(activePlan.EndDate.Sub(activePlan.StartDate).Hours()/24) + 1
 		}
 
 		tmpl := template.Must(template.ParseFiles("templates/index.html"))
@@ -60,7 +54,7 @@ func main() {
 
 	// Handle plans listing
 	http.HandleFunc("/plans", middleware.LoggingMiddleware(func(w http.ResponseWriter, r *http.Request) {
-		rows, err := db.Query("SELECT id, name, start_date, end_date, description FROM training_plans ORDER BY start_date DESC")
+		rows, err := db.Query("SELECT id, name, description FROM training_plans ORDER BY id DESC")
 		if err != nil {
 			http.Error(w, "Failed to fetch plans", http.StatusInternalServerError)
 			return
@@ -70,7 +64,7 @@ func main() {
 		var plans []models.TrainingPlan
 		for rows.Next() {
 			var plan models.TrainingPlan
-			err := rows.Scan(&plan.ID, &plan.Name, &plan.StartDate, &plan.EndDate, &plan.Description)
+			err := rows.Scan(&plan.ID, &plan.Name, &plan.Description)
 			if err != nil {
 				log.Printf("Error scanning plan row: %v", err)
 				continue
@@ -103,43 +97,24 @@ func main() {
 
 		// Parse form values
 		name := r.FormValue("name")
-		startDateStr := r.FormValue("start_date")
-		endDateStr := r.FormValue("end_date")
 		description := r.FormValue("description")
 
 		// Validate required fields
-		if name == "" || startDateStr == "" || endDateStr == "" {
+		if name == "" {
 			http.Error(w, "Missing required fields", http.StatusBadRequest)
-			return
-		}
-
-		// Parse dates
-		startDate, err := time.Parse("2006-01-02", startDateStr)
-		if err != nil {
-			http.Error(w, "Invalid start date format", http.StatusBadRequest)
-			return
-		}
-
-		endDate, err := time.Parse("2006-01-02", endDateStr)
-		if err != nil {
-			http.Error(w, "Invalid end date format", http.StatusBadRequest)
 			return
 		}
 
 		// Create training plan
 		plan := &models.TrainingPlan{
 			Name:        name,
-			StartDate:   startDate,
-			EndDate:     endDate,
 			Description: description,
 		}
 
 		// Insert into database
 		result, err := db.Exec(
-			"INSERT INTO training_plans (name, start_date, end_date, description) VALUES (?, ?, ?, ?)",
+			"INSERT INTO training_plans (name, description) VALUES (?, ?)",
 			plan.Name,
-			plan.StartDate,
-			plan.EndDate,
 			plan.Description,
 		)
 		if err != nil {

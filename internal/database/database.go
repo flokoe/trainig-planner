@@ -10,8 +10,6 @@ const Schema = `
 CREATE TABLE IF NOT EXISTS training_plans (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    start_date DATETIME NOT NULL,
-    end_date DATETIME NOT NULL,
     description TEXT
 );
 

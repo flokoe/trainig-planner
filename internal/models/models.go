@@ -6,11 +6,9 @@ import (
 
 // TrainingPlan represents a complete training program
 type TrainingPlan struct {
-	ID          int64     `db:"id"`
-	Name        string    `db:"name"`
-	StartDate   time.Time `db:"start_date"`
-	EndDate     time.Time `db:"end_date"`
-	Description string    `db:"description"`
+	ID          int64  `db:"id"`
+	Name        string `db:"name"`
+	Description string `db:"description"`
 }
 
 // TrainingSession represents a planned workout
