@@ -134,7 +134,7 @@ func main() {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}))
 
-	// Handle session form
+	// Handle plan views and session form
 	http.HandleFunc("/plans/", middleware.LoggingMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path[len("/plans/"):] == "new" {
 			http.ServeFile(w, r, "templates/plan_form.html")
@@ -142,12 +142,74 @@ func main() {
 		}
 
 		pathParts := strings.Split(r.URL.Path, "/")
+		if len(pathParts) < 3 {
+			http.NotFound(w, r)
+			return
+		}
+
+		// Handle session form
 		if len(pathParts) == 4 && pathParts[3] == "new" {
 			planID := pathParts[2]
 			tmpl := template.Must(template.ParseFiles("templates/session_form.html"))
 			tmpl.Execute(w, struct{ PlanID string }{planID})
 			return
 		}
+
+		// Handle single plan view
+		planID, err := strconv.ParseInt(pathParts[2], 10, 64)
+		if err != nil {
+			http.Error(w, "Invalid plan ID", http.StatusBadRequest)
+			return
+		}
+
+		// Get plan details
+		var plan models.TrainingPlan
+		err = db.QueryRow(`
+			SELECT id, name, description 
+			FROM training_plans 
+			WHERE id = ?`, planID).Scan(&plan.ID, &plan.Name, &plan.Description)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				http.NotFound(w, r)
+			} else {
+				http.Error(w, "Database error", http.StatusInternalServerError)
+			}
+			return
+		}
+
+		// Get associated sessions
+		rows, err := db.Query(`
+			SELECT id, scheduled_date, type, description, intensity 
+			FROM training_sessions 
+			WHERE plan_id = ? 
+			ORDER BY scheduled_date`, planID)
+		if err != nil {
+			http.Error(w, "Database error", http.StatusInternalServerError)
+			return
+		}
+		defer rows.Close()
+
+		var sessions []models.TrainingSession
+		for rows.Next() {
+			var session models.TrainingSession
+			err := rows.Scan(&session.ID, &session.ScheduledDate, &session.Type, &session.Description, &session.Intensity)
+			if err != nil {
+				log.Printf("Error scanning session row: %v", err)
+				continue
+			}
+			sessions = append(sessions, session)
+		}
+
+		data := struct {
+			Plan     models.TrainingPlan
+			Sessions []models.TrainingSession
+		}{
+			Plan:     plan,
+			Sessions: sessions,
+		}
+
+		tmpl := template.Must(template.ParseFiles("templates/plan.html"))
+		tmpl.Execute(w, data)
 	}))
 
 	// Handle session creation
