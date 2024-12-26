@@ -27,18 +27,18 @@
             <div class="sessions">
                 <h2>Training Sessions</h2>
                 {{if .Sessions}}
-                    <div class="sessions-list">
+                    <ul class="sessions-list">
                         {{range .Sessions}}
-                            <div class="session-card">
-                                <h3>{{.Type}}</h3>
+                            <li class="session-card">
+                                <h3>{{.Workout}}</h3>
                                 <p class="date">{{.ScheduledDate.Format "Jan 02, 2006"}}</p>
                                 <p class="intensity">Intensity: {{.Intensity}}%</p>
                                 {{if .Description}}
                                     <p class="description">{{.Description}}</p>
                                 {{end}}
-                            </div>
+                            </li>
                         {{end}}
-                    </div>
+                    </ul>
                 {{else}}
                     <p>No training sessions yet. <a href="/plans/{{.Plan.ID}}/sessions/new">Add your first session</a>.</p>
                 {{end}}
