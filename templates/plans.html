@@ -22,7 +22,6 @@
                     <div class="plan-card">
                         <h2><a href="/plans/{{.ID}}">{{.Name}}</a></h2>
                         <a href="/plans/{{.ID}}/sessions/new" class="button">Add Session</a>
-                        <p class="dates">{{.StartDate.Format "Jan 02, 2006"}} - {{.EndDate.Format "Jan 02, 2006"}}</p>
                         {{if .Description}}
                             <p class="description">{{.Description}}</p>
                         {{end}}
