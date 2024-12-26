@@ -132,7 +132,7 @@ func main() {
 			log.Printf("Created training plan with ID: %d", planID)
 		}
 
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+		http.Redirect(w, r, "/plans/"+strconv.FormatInt(planID, 10), http.StatusSeeOther)
 	}))
 
 	// Handle plan views and session form
