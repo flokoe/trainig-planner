@@ -187,7 +187,7 @@ func main() {
 			SELECT id, scheduled_date, workout, description, intensity 
 			FROM training_sessions 
 			WHERE plan_id = ? 
-			ORDER BY scheduled_date`, planID)
+			ORDER BY scheduled_date ASC`, planID)
 		if err != nil {
 			http.Error(w, "Database error", http.StatusInternalServerError)
 			return
