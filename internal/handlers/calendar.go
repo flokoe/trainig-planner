@@ -109,7 +109,7 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 					ts.description, 
 					ts.date,
 					wt.name as workout_type,
-					cs.hfmax
+					COALESCE(cs.hfmax, '') as hfmax
 				FROM training_sessions ts 
 				JOIN training_plans p ON ts.plan_id = p.id
 				JOIN workout_types wt ON p.workout_type_id = wt.id
