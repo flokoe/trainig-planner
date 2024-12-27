@@ -17,7 +17,7 @@ type SessionsYAML struct {
 		Description string    `yaml:"description"`
 		Date        time.Time `yaml:"date"`
 		// Type-specific fields
-		HFMax       *int      `yaml:"hfmax,omitempty"`      // For cycling
+		HFMax       string    `yaml:"hfmax,omitempty"`      // For cycling
 		// Mobility has no additional fields
 		// Sandbag has no additional fields yet
 	} `yaml:"sessions"`
@@ -300,13 +300,13 @@ func handleViewPlan(db *sql.DB) http.HandlerFunc {
 
 		var sessions []struct {
 			models.TrainingSession
-			HFMax *int `json:"hfmax,omitempty"`
+			HFMax string `json:"hfmax,omitempty"`
 		}
 
 		for rows.Next() {
 			var session struct {
 				models.TrainingSession
-				HFMax *int `json:"hfmax,omitempty"`
+				HFMax string `json:"hfmax,omitempty"`
 			}
 			if err := rows.Scan(
 				&session.ID,

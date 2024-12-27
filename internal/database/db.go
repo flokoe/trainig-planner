@@ -40,7 +40,7 @@ func CreateTables(db *sql.DB) error {
 
 	CREATE TABLE IF NOT EXISTS cycling_sessions (
 		session_id INTEGER PRIMARY KEY,
-		hfmax INTEGER,
+		hfmax TEXT,
 		FOREIGN KEY (session_id) REFERENCES training_sessions(id)
 	);
 
