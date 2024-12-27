@@ -37,6 +37,8 @@ type SessionWithPlan struct {
 	PlanName    string
 	Description string
 	Date        time.Time
+	WorkoutType string
+	HFMax       sql.NullString  // For cycling
 }
 
 type CalendarData struct {
@@ -100,9 +102,18 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 			
 			// Get sessions with plan names for this day
 			rows, err := db.Query(`
-				SELECT ts.id, ts.plan_id, p.name, ts.description, ts.date 
+				SELECT 
+					ts.id, 
+					ts.plan_id, 
+					p.name, 
+					ts.description, 
+					ts.date,
+					wt.name as workout_type,
+					cs.hfmax
 				FROM training_sessions ts 
 				JOIN training_plans p ON ts.plan_id = p.id
+				JOIN workout_types wt ON p.workout_type_id = wt.id
+				LEFT JOIN cycling_sessions cs ON ts.id = cs.session_id
 				WHERE DATE(ts.date) = DATE(?)
 				ORDER BY ts.date
 			`, currentDate.Format("2006-01-02"))
@@ -116,7 +127,15 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 			var sessions []SessionWithPlan
 			for rows.Next() {
 				var session SessionWithPlan
-				err := rows.Scan(&session.ID, &session.PlanID, &session.PlanName, &session.Description, &session.Date)
+				err := rows.Scan(
+					&session.ID, 
+					&session.PlanID, 
+					&session.PlanName, 
+					&session.Description, 
+					&session.Date,
+					&session.WorkoutType,
+					&session.HFMax,
+				)
 				if err != nil {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return

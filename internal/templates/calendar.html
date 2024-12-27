@@ -141,8 +141,11 @@
                 <div class="date">{{.Date.Format "Jan 2"}}</div>
                 {{range .Sessions}}
                 <div class="session">
-                    <a href="/plans/{{.PlanID}}">{{.PlanName}}</a>
+                    <a href="/plans/{{.PlanID}}">{{.PlanName}}</a> ({{.WorkoutType}})
                     <div>{{.Description}}</div>
+                    {{if .HFMax.Valid}}
+                    <div>HF Max: {{.HFMax.String}}</div>
+                    {{end}}
                 </div>
                 {{end}}
             </td>
