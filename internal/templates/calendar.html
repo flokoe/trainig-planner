@@ -94,9 +94,12 @@
     </div>
 
     <div class="week-nav">
-        <a href="/?week=-1">Previous Week</a>
+        <a href="/?weekOffset={{subtract .WeekOffset 1}}">Previous Week</a>
+        <a href="/?weekOffset=0">Current Week</a>
+        <a href="/?weekOffset={{add .WeekOffset 1}}">Next Week</a>
+    </div>
+    <div class="current-week">
         <strong>Week of {{.CurrentWeek.Format "January 2, 2006"}}</strong>
-        <a href="/?week=1">Next Week</a>
     </div>
 
     <table class="calendar">

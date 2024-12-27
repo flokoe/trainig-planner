@@ -22,10 +22,9 @@ type SessionWithPlan struct {
 }
 
 type CalendarData struct {
-	Days         []CalendarDay
-	CurrentWeek  time.Time
-	PreviousWeek time.Time
-	NextWeek     time.Time
+	Days        []CalendarDay
+	CurrentWeek time.Time
+	WeekOffset  int
 }
 
 func handleCalendar(db *sql.DB) http.HandlerFunc {
@@ -39,7 +38,7 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 
 		// Get week offset from query parameter
 		weekOffset := 0
-		if offsetStr := r.URL.Query().Get("week"); offsetStr != "" {
+		if offsetStr := r.URL.Query().Get("weekOffset"); offsetStr != "" {
 			offset, err := strconv.Atoi(offsetStr)
 			if err == nil {
 				weekOffset = offset
@@ -91,12 +90,23 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 		}
 
 		data := CalendarData{
-			Days:         days,
-			CurrentWeek:  monday,
-			PreviousWeek: monday.AddDate(0, 0, -7),
-			NextWeek:     monday.AddDate(0, 0, 7),
+			Days:        days,
+			CurrentWeek: monday,
+			WeekOffset:  weekOffset,
 		}
 
+		// Register template functions
+		funcMap := template.FuncMap{
+			"add": func(a, b int) int {
+				return a + b
+			},
+			"subtract": func(a, b int) int {
+				return a - b
+			},
+		}
+		
+		tmpl = template.Must(template.New("calendar.html").Funcs(funcMap).ParseFiles("internal/templates/calendar.html"))
+		
 		if err := tmpl.Execute(w, data); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
