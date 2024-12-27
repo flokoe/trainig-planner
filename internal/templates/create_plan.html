@@ -10,6 +10,11 @@
             display: block;
             margin-bottom: 0.5rem;
         }
+        .yaml-input {
+            width: 100%;
+            min-height: 200px;
+            font-family: monospace;
+        }
     </style>
 </head>
 <body>
@@ -27,6 +32,17 @@
                     <option value="{{.ID}}">{{.Name}}</option>
                 {{end}}
             </select>
+        </div>
+        <div class="form-group">
+            <label for="yaml_sessions">Sessions YAML (Optional):</label>
+            <textarea id="yaml_sessions" name="yaml_sessions" class="yaml-input" placeholder="# Example YAML format:
+sessions:
+  - order: 1
+    description: Warm up session
+    date: 2024-03-20T10:00:00Z
+  - order: 2
+    description: Main workout
+    date: 2024-03-22T10:00:00Z"></textarea>
         </div>
         <button type="submit">Create Plan</button>
     </form>
