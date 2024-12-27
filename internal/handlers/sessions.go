@@ -63,7 +63,7 @@ func handleCreateSession(db *sql.DB) http.HandlerFunc {
 			defer tx.Rollback()
 
 			// Parse and validate date
-			date, err := time.Parse("2006-01-02T15:04", r.FormValue("date"))
+			date, err := time.Parse("2006-01-02", r.FormValue("date"))
 			if err != nil {
 				http.Error(w, "Invalid date format", http.StatusBadRequest)
 				return
