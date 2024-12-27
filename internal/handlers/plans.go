@@ -7,8 +7,17 @@ import (
 	"net/http"
 	"time"
 
+	"gopkg.in/yaml.v3"
 	"training-tracker/internal/models"
 )
+
+type SessionsYAML struct {
+	Sessions []struct {
+		Order       int       `yaml:"order"`
+		Description string    `yaml:"description"`
+		Date        time.Time `yaml:"date"`
+	} `yaml:"sessions"`
+}
 
 func handleCreatePlan(db *sql.DB) http.HandlerFunc {
 	tmpl := template.Must(template.ParseFiles("internal/templates/create_plan.html"))
@@ -53,8 +62,16 @@ func handleCreatePlan(db *sql.DB) http.HandlerFunc {
 			name := r.FormValue("name")
 			workoutTypeID := r.FormValue("workout_type_id")
 
+			// Start a transaction
+			tx, err := db.Begin()
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			defer tx.Rollback()
+
 			// Insert new plan into database
-			result, err := db.Exec(`
+			result, err := tx.Exec(`
 				INSERT INTO training_plans (name, workout_type_id, created_at)
 				VALUES (?, ?, ?)
 			`, name, workoutTypeID, time.Now())
@@ -65,14 +82,42 @@ func handleCreatePlan(db *sql.DB) http.HandlerFunc {
 			}
 
 			// Get the ID of the newly inserted plan
-			id, err := result.LastInsertId()
+			planID, err := result.LastInsertId()
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
 
+			// Process YAML sessions if provided
+			yamlData := r.FormValue("yaml_sessions")
+			if yamlData != "" {
+				var sessions SessionsYAML
+				if err := yaml.Unmarshal([]byte(yamlData), &sessions); err != nil {
+					http.Error(w, "Invalid YAML format: "+err.Error(), http.StatusBadRequest)
+					return
+				}
+
+				// Insert all sessions
+				for _, s := range sessions.Sessions {
+					_, err = tx.Exec(`
+						INSERT INTO training_sessions (plan_id, session_order, description, date)
+						VALUES (?, ?, ?, ?)
+					`, planID, s.Order, s.Description, s.Date)
+					if err != nil {
+						http.Error(w, err.Error(), http.StatusInternalServerError)
+						return
+					}
+				}
+			}
+
+			// Commit the transaction
+			if err := tx.Commit(); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+
 			// Redirect to plan view
-			http.Redirect(w, r, fmt.Sprintf("/plans/%d", id), http.StatusSeeOther)
+			http.Redirect(w, r, fmt.Sprintf("/plans/%d", planID), http.StatusSeeOther)
 			return
 		}
 
