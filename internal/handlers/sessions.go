@@ -72,7 +72,7 @@ func handleCreateSession(db *sql.DB) http.HandlerFunc {
 			// Insert base session
 			result, err := tx.Exec(`
 				INSERT INTO training_sessions (plan_id, session_order, description, date)
-				VALUES (?, ?, ?, ?)`,
+				VALUES (?, NULLIF(?, ''), ?, ?)`,
 				planID,
 				r.FormValue("session_order"),
 				r.FormValue("description"),
