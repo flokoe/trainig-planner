@@ -1,0 +1,273 @@
+sessions:
+  - description: 25 min Grundlageneinheit
+    date: 2024-12-16T00:00:00Z
+    hfmax: 68-73
+  - description: 30 min Grundlageneinheit
+    date: 2024-12-19T00:00:00Z
+    hfmax: 68-73
+  - description: 40 min Grundlageneinheit
+    date: 2024-12-21T00:00:00Z
+    hfmax: 68-73
+
+  - description: 30 min Grundlageneinheit
+    date: 2024-12-23T00:00:00Z
+    hfmax: 68-73
+  - description: 40 min Grundlageneinheit, darin 4 kurze Antritte á 6 sec
+    date: 2024-12-26T00:00:00Z
+    hfmax: 68-73
+  - description: 40 min Grundlageneinheit
+    date: 2024-12-28T00:00:00Z
+    hfmax: 68-73
+
+  - description: 35 min Grundlageneinheit
+    date: 2024-12-30T00:00:00Z
+    hfmax: 68-73
+  - description: 40 min Grundlageneinheit
+    date: 2025-01-02T00:00:00Z
+    hfmax: 68-73
+  - description: 60 min Grundlageneinheit
+    date: 2025-01-04T00:00:00Z
+    hfmax: 68-73
+
+  - description: 30 ganz locker fahren
+    date: 2025-01-09T00:00:00Z
+    hfmax: < 65
+  - description: 40 min Grundlageneinheit
+    date: 2025-01-11T00:00:00Z
+    hfmax: 68-73
+
+  - description: 40 min Grundlageneinheit, darin 6 kurze Antritte á 6 sec
+    date: 2025-01-13T00:00:00Z
+    hfmax: 68-73
+  - description: 40 min Grundlageneinheit, darin 6 kurze Antritte á 6 sec
+    date: 2025-01-15T00:00:00Z
+    hfmax: 68-73
+  - description: 60 min Grundlageneinheit
+    date: 2025-01-18T00:00:00Z
+    hfmax: 68-73
+
+  - description: 45 min Grundlageneinheit
+    date: 2025-01-20T00:00:00Z
+    hfmax: 68-73
+  - description: 10min Einfahren, 4x30s intensive Belastung bei 90-95 % HFmax (EB) mit 4 min locker kurbeln zur aktiven Erholung, 5 min lockeres Ausfahren
+    date: 2025-01-22T00:00:00Z
+    hfmax: 70-75 (85-95)
+  - description: 75 min Grundlageneinheit
+    date: 2025-01-25T00:00:00Z
+    hfmax: 68-73
+
+  - description: 15 min Einfahren, 4x2 min Kraftausdauer (mit dickem Gang fahren) bei 68 - 73 % mit 2 min locker kurbeln zur aktiven Erholung, 15 min lockeres Ausfahren
+    date: 2025-01-27T00:00:00Z
+    hfmax: 68-73
+  - description: 50 min Grundlageneinheit, darin 6 kurze Antritte á 8 sec
+    date: 2025-01-29T00:00:00Z
+    hfmax: 68-73
+  - description: 90 min Grundlageneinheit
+    date: 2025-02-01T00:00:00Z
+    hfmax: 68-73
+
+  - description: 40 min locker kurbeln
+    date: 2025-02-03T00:00:00Z
+    hfmax: < 65
+  - description: 30 min locker kurbeln, darin 3 kurze Antritte á 6 sec
+    date: 2025-02-05T00:00:00Z
+    hfmax: 68-73
+  - description: 75 min Grundlageneinheit
+    date: 2025-02-08T00:00:00Z
+    hfmax: 68-73
+
+  - description: 15 min Einfahren, 6x30 sec intensive Belastung bei 90-95 % HFmax (EB) mit 3 min locker kurbeln zur aktiven Erholung, 10 min lockeres Ausfahren
+    date: 2025-02-10T00:00:00Z
+    hfmax: 85-95
+  - description: 15 min Einfahren, 4x1 min intensive Belastung bei 90-95 % HFmax (EB) mit 4 min locker kurbeln zur aktiven Erholung, 10 min lockeres Ausfahren
+    date: 2025-02-12T00:00:00Z
+    hfmax: 85-95
+  - description: 60 min Grundlageneinheit
+    date: 2025-02-15T00:00:00Z
+    hfmax: 68-73
+  - description: 90 min Grundlageneinheit
+    date: 2025-02-16T00:00:00Z
+    hfmax: 68-73
+
+  - description: 50 min Grundlageneinheit
+    date: 2025-02-17T00:00:00Z
+    hfmax: 68-73
+  - description: 50 min Grundlageneinheit, darin 6 kurze Antritte á 6 sec
+    date: 2025-02-19T00:00:00Z
+    hfmax: 68-73
+  - description: 90 min Grundlageneinheit
+    date: 2025-02-22T00:00:00Z
+    hfmax: 68-73
+  - description: 90 min Grundlageneinheit
+    date: 2025-02-23T00:00:00Z
+    hfmax: 68-73
+
+  - description: 15 min Einfahren, 6x30 sec intensive Belastung bei 90-95 % HFmax (EB) mit 3 min locker kurbeln zur aktiven Erholung, 10 min lockeres Ausfahren
+    date: 2025-02-24T00:00:00Z
+    hfmax: 85-95
+  - description: 15 min Einfahren, 4x1 min intensive Belastung bei 90-95 % HFmax (EB) mit 4 min locker kurbeln zur aktiven Erholung, 10 min lockeres Ausfahren
+    date: 2025-02-26T00:00:00Z
+    hfmax: 85-95
+  - description: 60 min Grundlageneinheit, darin 4-6 kurze Antritte á 6-8 sec
+    date: 2025-03-01T00:00:00Z
+    hfmax: 70-75
+  - description: 90 min Grundlageneinheit
+    date: 2025-03-02T00:00:00Z
+    hfmax: 68-73
+
+  - description: 40 min locker kurbeln
+    date: 2025-03-03T00:00:00Z
+    hfmax: < 65
+  - description: 40 min Grundlagendeinheit
+    date: 2025-03-05T00:00:00Z
+    hfmax: 68-73
+  - description: 60 min Grundlageneinheit
+    date: 2025-03-08T00:00:00Z
+    hfmax: 68-73
+
+  - description: 15 min Einfahren, 4x2 min Kraftausdauer (mit dickem Gang fahren) bei 68 - 73 % mit 2 min locker kurbeln zur aktiven Erholung,15 min lockeres Ausfahren
+    date: 2025-03-10T00:00:00Z
+    hfmax: 68-73
+  - description: 90 min Grundlageneinheit, darin 4-6 kurze Antritte á 6-8 sec
+    date: 2025-03-12T00:00:00Z
+    hfmax: 68-73
+  - description: 60 min Grundlageneinheit, darin 4-6 kurze Antritte á 6-8 sec
+    date: 2025-03-15T00:00:00Z
+    hfmax: 68-73
+  - description: 150 min Grundlageneinheit
+    date: 2025-03-16T00:00:00Z
+    hfmax: 68-73
+
+  - description: 15 min Einfahren, 4x4 min Kraftausdauer (mit dickem Gang fahren) bei 68 - 73 % mit 3 min locker kurbeln zur aktiven Erholung, 15 min lockeres Ausfahren
+    date: 2025-03-17T00:00:00Z
+    hfmax: 68-73
+  - description: 60 min Grundlageneinheit, darin 4-6 kurze Antritte á 6-8 sec
+    date: 2025-03-19T00:00:00Z
+    hfmax: 68-73
+  - description: 90 min Grundlageneinheit
+    date: 2025-03-22T00:00:00Z
+    hfmax: 68-73
+  - description: 2.5h Grundlageneinheit
+    date: 2025-03-23T00:00:00Z
+    hfmax: 68-73
+
+  - description: "15 min Einfahren, 4x3 min intensiv (EB) P: 4 min locker, 10 min lockeres Ausfahren"
+    date: 2025-03-24T00:00:00Z
+    hfmax: 85-95
+  - description: 60 min Grundlageneinheit
+    date: 2025-03-26T00:00:00Z
+    hfmax: 68-73
+  - description: 2h Grundlageneinheit
+    date: 2025-03-29T00:00:00Z
+    hfmax: 68-73
+  - description: 2.5h Grundlageneinheit
+    date: 2025-03-30T00:00:00Z
+    hfmax: 68-73
+
+  - description: 40 min locker kurbeln
+    date: 2025-03-31T00:00:00Z
+    hfmax: < 65
+  - description: 50 min Grundlageneinheit
+    date: 2025-04-02T00:00:00Z
+    hfmax: 68-73
+  - description: 60 min Grundlageneinheit
+    date: 2025-04-05T00:00:00Z
+    hfmax: 68-73
+
+  - description: "45 min Einfahren, 4x4 min intensiv (EB) P: 3 min locker, 30 min lockeres Ausfahren"
+    date: 2025-04-07T00:00:00Z
+    hfmax: 85-95
+  - description: 15 min locker Einfahren, 50 min GA2, 10 min locker Ausfahren
+    date: 2025-04-09T00:00:00Z
+    hfmax: 75-85
+  - description: 4h Grundlageneinheit, darin 4-6 kurze Antritte á 6-8 sec
+    date: 2025-04-12T00:00:00Z
+    hfmax: 68-73
+  - description: 3h Grundlageneinheit
+    date: 2025-04-13T00:00:00Z
+    hfmax: 68-73
+
+  - description: "20 min Einfahren, 4x6 min intensiv (EB) P: 4 min, 15 min lockeres Ausfahren"
+    date: 2025-04-14T00:00:00Z
+    hfmax: 85-95
+  - description: 90 min Grundlageneinheit
+    date: 2025-04-16T00:00:00Z
+    hfmax: 68-73
+  - description: 120 min Grundlageneinheit, darin 4-6 kurze Antritte á 6-8 sec
+    date: 2025-04-19T00:00:00Z
+    hfmax: 68-73
+  - description: 3.5h Grundlageneinheit
+    date: 2025-04-20T00:00:00Z
+    hfmax: 68-73
+
+  - description: 60 min locker kurbel
+    date: 2025-04-21T00:00:00Z
+    hfmax: < 65
+  - description: 2.5h min Grundlageneinheit
+    date: 2025-04-23T00:00:00Z
+    hfmax: 68-73
+  - description: 4h Grundlageneinheit
+    date: 2025-04-26T00:00:00Z
+    hfmax: 68-73
+  - description: 6h Grundlageneinheit
+    date: 2025-04-27T00:00:00Z
+    hfmax: 68-73
+
+  - description: 60 min Grundlageneinheit
+    date: 2025-04-28T00:00:00Z
+    hfmax: 68-73
+  - description: 40 min locker kurbeln
+    date: 2025-04-30T00:00:00Z
+    hfmax: < 65
+  - description: 60 min Grundlageneinheit
+    date: 2025-05-03T00:00:00Z
+    hfmax: 68-73
+  - description: 60 min Grundlageneinheit
+    date: 2025-05-04T00:00:00Z
+    hfmax: 68-73
+
+  - description: "40 min Einfahren, 4x10 min intensiv (EB) P: 5 min, 15 min lockeres Ausfahren"
+    date: 2025-05-05T00:00:00Z
+    hfmax: 85-95
+  - description: 15 min locker Einfahren, 60 min GA2, 10 min locker Ausfahren
+    date: 2025-05-07T00:00:00Z
+    hfmax: 75-85
+  - description: 90 min Grundlageneinheit
+    date: 2025-05-10T00:00:00Z
+    hfmax: 68-73
+  - description: 3.5h min Grundlageneinheit
+    date: 2025-05-11T00:00:00Z
+    hfmax: 68-73
+
+  - description: 15 min locker Einfahren, 60 min Grundlageneinheit 2, 10 min locker Ausfahren
+    date: 2025-05-12T00:00:00Z
+    hfmax: 75-85
+  - description: 90 min Grundlageneinheit, darin 4-6 kurze Antritte á 6-8 sec
+    date: 2025-05-14T00:00:00Z
+    hfmax: 68-73
+  - description: 90 min Grundlageneinheit, darin 4-6 kurze Antritte á 6-8 sec
+    date: 2025-05-17T00:00:00Z
+    hfmax: 68-73
+  - description: 2.5h Grundlageneinheit
+    date: 2025-05-18T00:00:00Z
+    hfmax: 68-73
+
+  - description: 90 min Grundlageneinheit
+    date: 2025-05-19T00:00:00Z
+    hfmax: 68-73
+  - description: 2h Grundlageneinheit, darin 4-6 kurze Antritte á 6-8 sec
+    date: 2025-05-21T00:00:00Z
+    hfmax: 68-73
+  - description: 60 min Grundlageneinheit, darin 4-6 kurze Antritte á 6-8 sec
+    date: 2025-05-24T00:00:00Z
+    hfmax: 68-73
+
+  - description: 60 min locker kurbeln
+    date: 2025-05-26T00:00:00Z
+    hfmax: < 65
+  - description: 40 min Grundlageneinheit, darin 4 kurze Antritte á 30 sec
+    date: 2025-05-28T00:00:00Z
+    hfmax: 68-73
+  - description: 30 min Grundlageneinheit, darin 4 kurze Antritte á 20 sec
+    date: 2025-05-30T00:00:00Z
+    hfmax: 68-73
