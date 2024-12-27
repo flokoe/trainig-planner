@@ -148,15 +148,6 @@
         </div>
     </div>
 
-    <div class="week-nav">
-        <a href="/?weekOffset={{subtract .WeekOffset 1}}">Previous Week</a>
-        <a href="/?weekOffset=0">Current Week</a>
-        <a href="/?weekOffset={{add .WeekOffset 1}}">Next Week</a>
-    </div>
-    <div class="current-week">
-        <strong>Calendar Week {{.WeekNumber}} of {{.Year}}</strong>
-    </div>
-
     {{if .Progress}}
     <div style="margin: 20px 0;">
         <h3>Total Progress</h3>
@@ -189,6 +180,15 @@
         </div>
     </div>
     {{end}}
+
+    <div class="week-nav">
+        <a href="/?weekOffset={{subtract .WeekOffset 1}}">Previous Week</a>
+        <a href="/?weekOffset=0">Current Week</a>
+        <a href="/?weekOffset={{add .WeekOffset 1}}">Next Week</a>
+    </div>
+    <div class="current-week">
+        <strong>Calendar Week {{.WeekNumber}} of {{.Year}}</strong>
+    </div>
 
     <table class="calendar">
         <tr>
