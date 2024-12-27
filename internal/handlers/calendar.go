@@ -110,8 +110,11 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 		"multiply": func(a, b int) int {
 			return a * b
 		},
-		"now": func() string {
-			return time.Now().Format("2006-01-02")
+		"isToday": func(date time.Time) bool {
+			now := time.Now()
+			y1, m1, d1 := date.Date()
+			y2, m2, d2 := now.Date()
+			return y1 == y2 && m1 == m2 && d1 == d2
 		},
 	}
 	
