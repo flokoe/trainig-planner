@@ -13,4 +13,7 @@ func RegisterRoutes(mux *http.ServeMux, db *sql.DB) {
 	
 	// Sessions handlers
 	mux.HandleFunc("/sessions/create/", handleCreateSession(db))
+	
+	// Calendar handler
+	mux.HandleFunc("/", handleCalendar(db))
 }
