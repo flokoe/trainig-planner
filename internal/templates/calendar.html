@@ -144,7 +144,7 @@
                 <div class="session">
                     <a href="/plans/{{.PlanID}}">{{.PlanName}}</a> ({{.WorkoutType}})
                     <div>{{.Description}}</div>
-                    {{if eq .WorkoutType "Cycling"}}
+                    {{if eq .WorkoutType "cycling"}}
                         {{if .HFMax.Valid}}
                         <div>HF Max: {{.HFMax.String}}</div>
                         {{end}}
