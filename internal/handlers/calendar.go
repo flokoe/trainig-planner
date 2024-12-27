@@ -73,6 +73,13 @@ type SessionWithPlan struct {
 	Completed   bool
 }
 
+type WorkoutProgress struct {
+    WorkoutType string
+    Completed   int
+    Total       int
+    Percentage  float64
+}
+
 type CalendarData struct {
     Days        []CalendarDay
     CurrentWeek time.Time
@@ -80,6 +87,7 @@ type CalendarData struct {
     WeekNumber  int
     Year        int
     MonthData   MonthData
+    Progress    []WorkoutProgress
 }
 
 func handleCalendar(db *sql.DB) http.HandlerFunc {
@@ -187,12 +195,60 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 		}
 
 		year, week := monday.ISOWeek()
+		// Calculate progress for each workout type
+		progress := []WorkoutProgress{}
+		
+		progressRows, err := db.Query(`
+			WITH workout_sessions AS (
+				SELECT 
+					wt.name as workout_type,
+					ts.completed,
+					ts.date
+				FROM training_sessions ts 
+				JOIN training_plans p ON ts.plan_id = p.id
+				JOIN workout_types wt ON p.workout_type_id = wt.id
+				WHERE ts.date >= ? AND ts.date <= ? AND ts.date <= ?
+			)
+			SELECT 
+				workout_type,
+				SUM(CASE WHEN completed = 1 THEN 1 ELSE 0 END) as completed,
+				COUNT(*) as total
+			FROM workout_sessions
+			GROUP BY workout_type
+			HAVING total > 0
+		`, 
+			monday.Format("2006-01-02"), 
+			monday.AddDate(0, 0, 6).Format("2006-01-02"),
+			time.Now().Format("2006-01-02"),
+		)
+		
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		defer progressRows.Close()
+
+		for progressRows.Next() {
+			var p WorkoutProgress
+			var completed, total int
+			err := progressRows.Scan(&p.WorkoutType, &completed, &total)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			p.Completed = completed
+			p.Total = total
+			p.Percentage = float64(completed) / float64(total) * 100
+			progress = append(progress, p)
+		}
+
 		data := CalendarData{
 			Days:        days,
 			CurrentWeek: monday,
 			WeekOffset:  weekOffset,
 			WeekNumber:  week,
 			Year:        year,
+			Progress:    progress,
 		}
 
 		// Get the first day of the current month

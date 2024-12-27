@@ -157,6 +157,39 @@
         <strong>Calendar Week {{.WeekNumber}} of {{.Year}}</strong>
     </div>
 
+    {{if .Progress}}
+    <div style="margin: 20px 0;">
+        <h3>This Week's Progress</h3>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+            {{range .Progress}}
+            <div style="
+                background: white;
+                padding: 15px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                min-width: 200px;
+            ">
+                <div style="font-weight: bold; margin-bottom: 8px;">{{.WorkoutType}}</div>
+                <div style="margin-bottom: 8px;">{{.Completed}} / {{.Total}} completed</div>
+                <div style="
+                    background: #f0f0f0;
+                    border-radius: 4px;
+                    height: 8px;
+                    overflow: hidden;
+                ">
+                    <div style="
+                        width: {{.Percentage}}%;
+                        height: 100%;
+                        background: #4CAF50;
+                        transition: width 0.3s ease;
+                    "></div>
+                </div>
+            </div>
+            {{end}}
+        </div>
+    </div>
+    {{end}}
+
     <table class="calendar">
         <tr>
             <th>Monday</th>
