@@ -14,6 +14,25 @@ type MonthDay struct {
     Sessions      []MonthSession
 }
 
+func handleCompleteSession(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+
+		sessionID := r.URL.Path[len("/complete-session/"):]
+		
+		_, err := db.Exec("UPDATE training_sessions SET completed = 1 WHERE id = ?", sessionID)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	}
+}
+
 type MonthSession struct {
     PlanName    string
     WorkoutType string
@@ -39,6 +58,7 @@ type SessionWithPlan struct {
 	Date        time.Time
 	WorkoutType string
 	HFMax       sql.NullString  // For cycling
+	Completed   bool
 }
 
 type CalendarData struct {
@@ -112,7 +132,8 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 					ts.description, 
 					ts.date,
 					wt.name as workout_type,
-					COALESCE(cs.hfmax, '') as hfmax
+					COALESCE(cs.hfmax, '') as hfmax,
+					ts.completed
 				FROM training_sessions ts 
 				JOIN training_plans p ON ts.plan_id = p.id
 				JOIN workout_types wt ON p.workout_type_id = wt.id
@@ -138,6 +159,7 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 					&session.Date,
 					&session.WorkoutType,
 					&session.HFMax,
+					&session.Completed,
 				)
 				if err != nil {
 					http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -35,6 +35,7 @@ func CreateTables(db *sql.DB) error {
 		session_order INTEGER,
 		description TEXT,
 		date TIMESTAMP NOT NULL,
+		completed BOOLEAN DEFAULT 0,
 		FOREIGN KEY (plan_id) REFERENCES training_plans(id)
 	);
 

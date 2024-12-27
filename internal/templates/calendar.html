@@ -109,6 +109,28 @@
         .current-day {
             background-color: #fff3e0 !important;
         }
+        .session.completed {
+            background-color: #e8f5e9 !important;
+        }
+        .complete-button {
+            float: right;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 2px 6px;
+            margin: -2px;
+            font-size: 1.2em;
+            color: #4CAF50;
+            opacity: 0.6;
+            border-radius: 50%;
+        }
+        .complete-button:hover {
+            opacity: 1;
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+        .session.completed .complete-button {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -144,7 +166,10 @@
             <td {{if eq (now) (.Date.Format "2006-01-02")}}class="current-day"{{end}}>
                 <div class="date">{{.Date.Format "Jan 2"}}</div>
                 {{range .Sessions}}
-                <div class="session">
+                <div class="session {{if .Completed}}completed{{end}}">
+                    <form method="POST" action="/complete-session/{{.ID}}" style="display: inline;">
+                        <button type="submit" class="complete-button" title="Mark as complete">✓</button>
+                    </form>
                     <a href="/plans/{{.PlanID}}">{{.PlanName}}</a> ({{.WorkoutType}})
                     <div>{{.Description}}</div>
                     {{if eq .WorkoutType "cycling"}}
