@@ -69,6 +69,9 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 		"multiply": func(a, b int) int {
 			return a * b
 		},
+		"now": func() string {
+			return time.Now().Format("2006-01-02")
+		},
 	}
 	
 	tmpl := template.Must(template.New("calendar.html").Funcs(funcMap).ParseFiles("internal/templates/calendar.html"))
