@@ -122,11 +122,11 @@ func handleCreatePlan(db *sql.DB) http.HandlerFunc {
 					// Handle type-specific fields based on workout type
 					switch workoutTypeID {
 					case "1": // cycling
-						if s.HFMax != nil {
+						if s.HFMax != "" {
 							_, err = tx.Exec(`
 								INSERT INTO cycling_sessions (session_id, hfmax)
 								VALUES (?, ?)
-							`, sessionID, *s.HFMax)
+							`, sessionID, s.HFMax)
 							if err != nil {
 								http.Error(w, err.Error(), http.StatusInternalServerError)
 								return
@@ -326,7 +326,7 @@ func handleViewPlan(db *sql.DB) http.HandlerFunc {
 			WorkoutTypeName string
 			Sessions        []struct {
 				models.TrainingSession
-				HFMax *int `json:"hfmax,omitempty"`
+				HFMax string `json:"hfmax,omitempty"`
 			}
 			WorkoutTypeID   int64
 		}{
