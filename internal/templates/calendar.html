@@ -82,6 +82,29 @@
             border-radius: 4px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+        .month-calendar td {
+            height: 80px;
+            width: 14.28%;
+            font-size: 0.9em;
+        }
+        .other-month {
+            background-color: #f8f8f8;
+            color: #999;
+        }
+        .month-session {
+            font-size: 0.8em;
+            padding: 2px 4px;
+            margin: 2px 0;
+            background-color: #e3f2fd;
+            border-radius: 3px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .month-session .type {
+            color: #666;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
@@ -125,6 +148,35 @@
             </td>
             {{end}}
         </tr>
+    </table>
+
+    <h2>Month Overview - {{.MonthData.Month}} {{.MonthData.Year}}</h2>
+    <table class="calendar month-calendar">
+        <tr>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+            <th>Sun</th>
+        </tr>
+        {{range $i := seq 0 5}}
+            <tr>
+                {{range $j := seq 0 6}}
+                    {{$day := index $.MonthData.Days (add (multiply $i 7) $j)}}
+                    <td class="{{if not $day.IsCurrentMonth}}other-month{{end}}">
+                        <div class="date">{{$day.Date.Format "2"}}</div>
+                        {{range $day.Sessions}}
+                            <div class="month-session">
+                                <span class="plan">{{.PlanName}}</span>
+                                <span class="type">{{.WorkoutType}}</span>
+                            </div>
+                        {{end}}
+                    </td>
+                {{end}}
+            </tr>
+        {{end}}
     </table>
 </body>
 </html>

@@ -8,9 +8,27 @@ import (
 	"time"
 )
 
+type MonthDay struct {
+    Date          time.Time
+    IsCurrentMonth bool
+    Sessions      []MonthSession
+}
+
+type MonthSession struct {
+    PlanName    string
+    WorkoutType string
+    Date        time.Time
+}
+
+type MonthData struct {
+    Days  []MonthDay
+    Month time.Month
+    Year  int
+}
+
 type CalendarDay struct {
-	Date     time.Time
-	Sessions []SessionWithPlan
+    Date     time.Time
+    Sessions []SessionWithPlan
 }
 
 type SessionWithPlan struct {
@@ -22,11 +40,12 @@ type SessionWithPlan struct {
 }
 
 type CalendarData struct {
-	Days        []CalendarDay
-	CurrentWeek time.Time
-	WeekOffset  int
-	WeekNumber  int
-	Year        int
+    Days        []CalendarDay
+    CurrentWeek time.Time
+    WeekOffset  int
+    WeekNumber  int
+    Year        int
+    MonthData   MonthData
 }
 
 func handleCalendar(db *sql.DB) http.HandlerFunc {
@@ -37,6 +56,16 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 		},
 		"subtract": func(a, b int) int {
 			return a - b
+		},
+		"seq": func(start, end int) []int {
+			seq := make([]int, end-start+1)
+			for i := range seq {
+				seq[i] = start + i
+			}
+			return seq
+		},
+		"multiply": func(a, b int) int {
+			return a * b
 		},
 	}
 	
@@ -108,6 +137,68 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 			WeekOffset:  weekOffset,
 			WeekNumber:  week,
 			Year:        year,
+		}
+
+		// Get the first day of the current month
+		firstOfMonth := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, now.Location())
+		lastOfMonth := firstOfMonth.AddDate(0, 1, -1)
+
+		// Get the first day to display (might be from previous month)
+		firstDisplayDay := firstOfMonth.AddDate(0, 0, -int(firstOfMonth.Weekday()))
+		if firstOfMonth.Weekday() == 0 { // If month starts on Sunday
+			firstDisplayDay = firstDisplayDay.AddDate(0, 0, -6)
+		}
+
+		// Create slice for up to 42 days (6 weeks)
+		monthDays := make([]MonthDay, 42)
+
+		// Get all sessions for the displayed date range
+		monthSessions, err := db.Query(`
+			SELECT p.name, wt.name, ts.date 
+			FROM training_sessions ts 
+			JOIN training_plans p ON ts.plan_id = p.id
+			JOIN workout_types wt ON p.workout_type_id = wt.id
+			WHERE ts.date >= ? AND ts.date <= ?
+			ORDER BY ts.date
+		`, firstDisplayDay.Format("2006-01-02"), firstDisplayDay.AddDate(0, 0, 41).Format("2006-01-02"))
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		defer monthSessions.Close()
+
+		// Create a map to store sessions by date
+		sessionsByDate := make(map[string][]MonthSession)
+		for monthSessions.Next() {
+			var session MonthSession
+			var date time.Time
+			err := monthSessions.Scan(&session.PlanName, &session.WorkoutType, &date)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			dateKey := date.Format("2006-01-02")
+			sessionsByDate[dateKey] = append(sessionsByDate[dateKey], session)
+		}
+
+		// Fill in the month days
+		for i := 0; i < 42; i++ {
+			currentDate := firstDisplayDay.AddDate(0, 0, i)
+			dateKey := currentDate.Format("2006-01-02")
+			
+			monthDays[i] = MonthDay{
+				Date:          currentDate,
+				IsCurrentMonth: currentDate.Month() == now.Month(),
+				Sessions:      sessionsByDate[dateKey],
+			}
+		}
+
+		// Add month data to the calendar data
+		data.MonthData = MonthData{
+			Days:  monthDays,
+			Month: now.Month(),
+			Year:  now.Year(),
 		}
 
 		if err := tmpl.Execute(w, data); err != nil {
