@@ -106,6 +106,11 @@ func handleCreateSession(db *sql.DB) http.HandlerFunc {
 					INSERT INTO sandbag_sessions (session_id)
 					VALUES (?)`,
 					sessionID)
+			case "core":
+				_, err = tx.Exec(`
+					INSERT INTO core_sessions (session_id)
+					VALUES (?)`,
+					sessionID)
 			}
 
 			if err != nil {

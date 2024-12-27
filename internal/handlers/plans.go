@@ -150,6 +150,15 @@ func handleCreatePlan(db *sql.DB) http.HandlerFunc {
 							http.Error(w, err.Error(), http.StatusInternalServerError)
 							return
 						}
+					case "4": // core
+						_, err = tx.Exec(`
+							INSERT INTO core_sessions (session_id)
+							VALUES (?)
+						`, sessionID)
+						if err != nil {
+							http.Error(w, err.Error(), http.StatusInternalServerError)
+							return
+						}
 					}
 				}
 			}

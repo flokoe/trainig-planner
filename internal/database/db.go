@@ -54,11 +54,17 @@ func CreateTables(db *sql.DB) error {
 		FOREIGN KEY (session_id) REFERENCES training_sessions(id)
 	);
 
+	CREATE TABLE IF NOT EXISTS core_sessions (
+		session_id INTEGER PRIMARY KEY,
+		FOREIGN KEY (session_id) REFERENCES training_sessions(id)
+	);
+
 	-- Insert default workout types if they don't exist
 	INSERT OR IGNORE INTO workout_types (name) VALUES 
 		('cycling'),
 		('mobility'),
-		('sandbag');
+		('sandbag'),
+		('core');
 	`
 
 	_, err := db.Exec(tables)

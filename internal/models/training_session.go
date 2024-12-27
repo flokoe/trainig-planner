@@ -22,3 +22,7 @@ type MobilitySession struct {
 type SandbagSession struct {
 	SessionID int64 `json:"session_id"`
 }
+
+type CoreSession struct {
+	SessionID int64 `json:"session_id"`
+}
