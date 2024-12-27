@@ -38,6 +38,22 @@ func CreateTables(db *sql.DB) error {
 		FOREIGN KEY (plan_id) REFERENCES training_plans(id)
 	);
 
+	CREATE TABLE IF NOT EXISTS cycling_sessions (
+		session_id INTEGER PRIMARY KEY,
+		hfmax INTEGER,
+		FOREIGN KEY (session_id) REFERENCES training_sessions(id)
+	);
+
+	CREATE TABLE IF NOT EXISTS mobility_sessions (
+		session_id INTEGER PRIMARY KEY,
+		FOREIGN KEY (session_id) REFERENCES training_sessions(id)
+	);
+
+	CREATE TABLE IF NOT EXISTS sandbag_sessions (
+		session_id INTEGER PRIMARY KEY,
+		FOREIGN KEY (session_id) REFERENCES training_sessions(id)
+	);
+
 	-- Insert default workout types if they don't exist
 	INSERT OR IGNORE INTO workout_types (name) VALUES 
 		('cycling'),

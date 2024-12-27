@@ -9,3 +9,16 @@ type TrainingSession struct {
 	Description  string    `json:"description"`
 	Date         time.Time `json:"date"`
 }
+
+type CyclingSession struct {
+	SessionID int64 `json:"session_id"`
+	HFMax     int   `json:"hf_max"`
+}
+
+type MobilitySession struct {
+	SessionID int64 `json:"session_id"`
+}
+
+type SandbagSession struct {
+	SessionID int64 `json:"session_id"`
+}
