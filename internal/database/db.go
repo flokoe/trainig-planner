@@ -25,7 +25,6 @@ func CreateTables(db *sql.DB) error {
 		id INTEGER PRIMARY KEY,
 		name TEXT NOT NULL,
 		workout_type_id INTEGER,
-		description TEXT,
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 		FOREIGN KEY (workout_type_id) REFERENCES workout_types(id)
 	);
