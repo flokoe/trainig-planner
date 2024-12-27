@@ -4,7 +4,7 @@ routines = ['Hamstring', 'Hip', 'Posture', 'Shoulder']
 weeks = range(1, 5)  # 1-4 weeks
 days = range(1, 4)   # 1-3 days per week
 
-start_date = datetime.now()
+start_date = datetime.now() + timedelta(days=1)  # Start tomorrow
 current_date = start_date
 days_count = 0
 routine_index = 0
@@ -13,7 +13,7 @@ day = 1
 
 output = []
 
-while days_count < 154:
+while days_count < 156:
     routine = routines[routine_index]
     
     # Format the output
