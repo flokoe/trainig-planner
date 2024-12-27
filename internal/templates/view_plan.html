@@ -32,7 +32,7 @@
             <ul>
             {{range .Sessions}}
                 <li>
-                    Session {{.SessionOrder}} - {{.Date.Format "January 2, 2006"}}
+                    {{.Date.Format "January 2, 2006"}}
                     <p>{{.Description}}</p>
                 </li>
             {{end}}
