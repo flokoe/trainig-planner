@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"html/template"
 	"net/http"
+	"net/url"
 	"strconv"
 	"time"
 )
@@ -29,7 +30,17 @@ func handleCompleteSession(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+		// Get the weekOffset from the Referer URL if present
+		redirectURL := "/"
+		if referer := r.Header.Get("Referer"); referer != "" {
+			if refererURL, err := url.Parse(referer); err == nil {
+				if weekOffset := refererURL.Query().Get("weekOffset"); weekOffset != "" {
+					redirectURL = "/?weekOffset=" + weekOffset
+				}
+			}
+		}
+
+		http.Redirect(w, r, redirectURL, http.StatusSeeOther)
 	}
 }
 
