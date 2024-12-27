@@ -48,6 +48,7 @@ type MonthSession struct {
     PlanName    string
     WorkoutType string
     Date        time.Time
+    Completed   bool
 }
 
 type MonthData struct {
@@ -208,7 +209,7 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 
 		// Get all sessions for the displayed date range
 		monthSessions, err := db.Query(`
-			SELECT p.name, wt.name, ts.date 
+			SELECT p.name, wt.name, ts.date, ts.completed 
 			FROM training_sessions ts 
 			JOIN training_plans p ON ts.plan_id = p.id
 			JOIN workout_types wt ON p.workout_type_id = wt.id
@@ -227,7 +228,7 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 		for monthSessions.Next() {
 			var session MonthSession
 			var date time.Time
-			err := monthSessions.Scan(&session.PlanName, &session.WorkoutType, &date)
+			err := monthSessions.Scan(&session.PlanName, &session.WorkoutType, &date, &session.Completed)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
