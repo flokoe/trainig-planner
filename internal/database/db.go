@@ -33,9 +33,8 @@ func CreateTables(db *sql.DB) error {
 		id INTEGER PRIMARY KEY,
 		plan_id INTEGER,
 		session_order INTEGER,
-		title TEXT NOT NULL,
 		description TEXT,
-		duration INTEGER,
+		date TIMESTAMP NOT NULL,
 		FOREIGN KEY (plan_id) REFERENCES training_plans(id)
 	);
 
