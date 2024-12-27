@@ -79,3 +79,84 @@ func handleCreatePlan(db *sql.DB) http.HandlerFunc {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 }
+
+func handleViewPlan(db *sql.DB) http.HandlerFunc {
+	tmpl := template.Must(template.ParseFiles("internal/templates/view_plan.html"))
+
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET" {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+
+		// Extract plan ID from URL path
+		planID := r.URL.Path[len("/plans/"):]
+		if planID == "" {
+			http.Error(w, "Plan ID is required", http.StatusBadRequest)
+			return
+		}
+
+		// Get plan details
+		var plan models.TrainingPlan
+		err := db.QueryRow(`
+			SELECT id, name, workout_type_id, created_at 
+			FROM training_plans 
+			WHERE id = ?`, planID).Scan(&plan.ID, &plan.Name, &plan.WorkoutTypeID, &plan.CreatedAt)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				http.Error(w, "Plan not found", http.StatusNotFound)
+				return
+			}
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		// Get workout type name
+		var workoutTypeName string
+		err = db.QueryRow(`
+			SELECT name 
+			FROM workout_types 
+			WHERE id = ?`, plan.WorkoutTypeID).Scan(&workoutTypeName)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		// Get training sessions
+		rows, err := db.Query(`
+			SELECT id, session_order, description, date 
+			FROM training_sessions 
+			WHERE plan_id = ? 
+			ORDER BY session_order`, plan.ID)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		defer rows.Close()
+
+		var sessions []models.TrainingSession
+		for rows.Next() {
+			var session models.TrainingSession
+			if err := rows.Scan(&session.ID, &session.SessionOrder, &session.Description, &session.Date); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			sessions = append(sessions, session)
+		}
+
+		data := struct {
+			Plan           models.TrainingPlan
+			WorkoutTypeName string
+			Sessions       []models.TrainingSession
+		}{
+			Plan:           plan,
+			WorkoutTypeName: workoutTypeName,
+			Sessions:       sessions,
+		}
+
+		if err := tmpl.Execute(w, data); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+}
