@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Training Plan</title>
+    <style>
+        .plan-details {
+            margin-bottom: 2rem;
+        }
+        .sessions-list {
+            margin-bottom: 2rem;
+        }
+        .button {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="plan-details">
+        <h1>{{.Plan.Name}}</h1>
+        <p>Workout Type: {{.WorkoutTypeName}}</p>
+        <p>Created: {{.Plan.CreatedAt.Format "January 2, 2006"}}</p>
+    </div>
+
+    <div class="sessions-list">
+        <h2>Training Sessions</h2>
+        {{if .Sessions}}
+            <ul>
+            {{range .Sessions}}
+                <li>
+                    Session {{.SessionOrder}} - {{.Date.Format "January 2, 2006"}}
+                    <p>{{.Description}}</p>
+                </li>
+            {{end}}
+            </ul>
+        {{else}}
+            <p>No sessions created yet.</p>
+        {{end}}
+    </div>
+
+    <a href="/sessions/new/{{.Plan.ID}}" class="button">Add New Session</a>
+</body>
+</html>
