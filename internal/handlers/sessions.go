@@ -93,7 +93,7 @@ func handleCreateSession(db *sql.DB) http.HandlerFunc {
 			case "cycling":
 				hfMax, _ := strconv.Atoi(r.FormValue("hf_max"))
 				_, err = tx.Exec(`
-					INSERT INTO cycling_sessions (session_id, hf_max)
+					INSERT INTO cycling_sessions (session_id, hfmax)
 					VALUES (?, ?)`,
 					sessionID, hfMax)
 			case "mobility":

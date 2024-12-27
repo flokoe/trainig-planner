@@ -12,7 +12,7 @@ type TrainingSession struct {
 
 type CyclingSession struct {
 	SessionID int64 `json:"session_id"`
-	HFMax     int   `json:"hf_max"`
+	HFMax     int   `json:"hfmax"`
 }
 
 type MobilitySession struct {
