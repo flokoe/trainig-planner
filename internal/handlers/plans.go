@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"database/sql"
+	"fmt"
 	"html/template"
 	"net/http"
 	"time"
@@ -53,7 +54,7 @@ func handleCreatePlan(db *sql.DB) http.HandlerFunc {
 			workoutTypeID := r.FormValue("workout_type_id")
 
 			// Insert new plan into database
-			_, err := db.Exec(`
+			result, err := db.Exec(`
 				INSERT INTO training_plans (name, workout_type_id, created_at)
 				VALUES (?, ?, ?)
 			`, name, workoutTypeID, time.Now())
@@ -63,8 +64,15 @@ func handleCreatePlan(db *sql.DB) http.HandlerFunc {
 				return
 			}
 
-			// Redirect to plans list
-			http.Redirect(w, r, "/", http.StatusSeeOther)
+			// Get the ID of the newly inserted plan
+			id, err := result.LastInsertId()
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			// Redirect to plan view
+			http.Redirect(w, r, fmt.Sprintf("/plans/%d", id), http.StatusSeeOther)
 			return
 		}
 
