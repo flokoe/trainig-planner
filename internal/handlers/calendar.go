@@ -74,6 +74,7 @@ type SessionWithPlan struct {
 }
 
 type WorkoutProgress struct {
+    PlanName    string
     WorkoutType string
     Completed   int
     Total       int
@@ -201,6 +202,7 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 		progressRows, err := db.Query(`
 			WITH workout_sessions AS (
 				SELECT 
+					p.name as plan_name,
 					wt.name as workout_type,
 					ts.completed,
 					ts.date
@@ -210,11 +212,12 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 				WHERE ts.date <= ?
 			)
 			SELECT 
+				plan_name,
 				workout_type,
 				SUM(CASE WHEN completed = 1 THEN 1 ELSE 0 END) as completed,
 				COUNT(*) as total
 			FROM workout_sessions
-			GROUP BY workout_type
+			GROUP BY plan_name, workout_type
 			HAVING total > 0
 		`, 
 			time.Now().Format("2006-01-02"),
@@ -229,7 +232,7 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 		for progressRows.Next() {
 			var p WorkoutProgress
 			var completed, total int
-			err := progressRows.Scan(&p.WorkoutType, &completed, &total)
+			err := progressRows.Scan(&p.PlanName, &p.WorkoutType, &completed, &total)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
