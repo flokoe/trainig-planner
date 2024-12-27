@@ -28,7 +28,17 @@ type CalendarData struct {
 }
 
 func handleCalendar(db *sql.DB) http.HandlerFunc {
-	tmpl := template.Must(template.ParseFiles("internal/templates/calendar.html"))
+	// Register template functions
+	funcMap := template.FuncMap{
+		"add": func(a, b int) int {
+			return a + b
+		},
+		"subtract": func(a, b int) int {
+			return a - b
+		},
+	}
+	
+	tmpl := template.Must(template.New("calendar.html").Funcs(funcMap).ParseFiles("internal/templates/calendar.html"))
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
@@ -95,18 +105,6 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 			WeekOffset:  weekOffset,
 		}
 
-		// Register template functions
-		funcMap := template.FuncMap{
-			"add": func(a, b int) int {
-				return a + b
-			},
-			"subtract": func(a, b int) int {
-				return a - b
-			},
-		}
-		
-		tmpl = template.Must(template.New("calendar.html").Funcs(funcMap).ParseFiles("internal/templates/calendar.html"))
-		
 		if err := tmpl.Execute(w, data); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
