@@ -18,7 +18,7 @@ while days_count < 155:
     
     # Format the output
     output.append(f"- description: {routine} W{week}D{day}")
-    output.append(f"  date: {current_date.strftime('%Y-%m-%d')}")
+    output.append(f"  date: {current_date.strftime('%Y-%m-%dT00:00:00Z')}")
     output.append("")
     
     # Move to next routine
