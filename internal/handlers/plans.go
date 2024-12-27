@@ -282,10 +282,7 @@ func handleViewPlan(db *sql.DB) http.HandlerFunc {
 				ts.session_order, 
 				ts.description, 
 				ts.date,
-				CASE 
-					WHEN cs.session_id IS NOT NULL THEN cs.hfmax
-					ELSE NULL
-				END as hfmax
+				COALESCE(cs.hfmax, '') as hfmax
 			FROM training_sessions ts
 			LEFT JOIN cycling_sessions cs ON ts.id = cs.session_id
 			LEFT JOIN mobility_sessions ms ON ts.id = ms.session_id
