@@ -207,7 +207,7 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 				FROM training_sessions ts 
 				JOIN training_plans p ON ts.plan_id = p.id
 				JOIN workout_types wt ON p.workout_type_id = wt.id
-				WHERE ts.date >= ? AND ts.date <= ? AND ts.date <= ?
+				WHERE ts.date <= ?
 			)
 			SELECT 
 				workout_type,
@@ -217,8 +217,6 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 			GROUP BY workout_type
 			HAVING total > 0
 		`, 
-			monday.Format("2006-01-02"), 
-			monday.AddDate(0, 0, 6).Format("2006-01-02"),
 			time.Now().Format("2006-01-02"),
 		)
 		
