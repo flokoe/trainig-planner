@@ -13,7 +13,7 @@ day = 1
 
 output = []
 
-while days_count < 156:
+while days_count < 155:
     routine = routines[routine_index]
     
     # Format the output
