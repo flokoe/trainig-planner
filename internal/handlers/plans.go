@@ -16,6 +16,10 @@ type SessionsYAML struct {
 		Order       int       `yaml:"order"`
 		Description string    `yaml:"description"`
 		Date        time.Time `yaml:"date"`
+		// Type-specific fields
+		HFMax       *int      `yaml:"hfmax,omitempty"`      // For cycling
+		// Mobility has no additional fields
+		// Sandbag has no additional fields yet
 	} `yaml:"sessions"`
 }
 
@@ -99,13 +103,53 @@ func handleCreatePlan(db *sql.DB) http.HandlerFunc {
 
 				// Insert all sessions
 				for _, s := range sessions.Sessions {
-					_, err = tx.Exec(`
+					// Start with base session insertion
+					result, err := tx.Exec(`
 						INSERT INTO training_sessions (plan_id, session_order, description, date)
 						VALUES (?, ?, ?, ?)
 					`, planID, s.Order, s.Description, s.Date)
 					if err != nil {
 						http.Error(w, err.Error(), http.StatusInternalServerError)
 						return
+					}
+
+					sessionID, err := result.LastInsertId()
+					if err != nil {
+						http.Error(w, err.Error(), http.StatusInternalServerError)
+						return
+					}
+
+					// Handle type-specific fields based on workout type
+					switch workoutTypeID {
+					case "1": // cycling
+						if s.HFMax != nil {
+							_, err = tx.Exec(`
+								INSERT INTO cycling_sessions (session_id, hfmax)
+								VALUES (?, ?)
+							`, sessionID, *s.HFMax)
+							if err != nil {
+								http.Error(w, err.Error(), http.StatusInternalServerError)
+								return
+							}
+						}
+					case "2": // mobility
+						_, err = tx.Exec(`
+							INSERT INTO mobility_sessions (session_id)
+							VALUES (?)
+						`, sessionID)
+						if err != nil {
+							http.Error(w, err.Error(), http.StatusInternalServerError)
+							return
+						}
+					case "3": // sandbag
+						_, err = tx.Exec(`
+							INSERT INTO sandbag_sessions (session_id)
+							VALUES (?)
+						`, sessionID)
+						if err != nil {
+							http.Error(w, err.Error(), http.StatusInternalServerError)
+							return
+						}
 					}
 				}
 			}
