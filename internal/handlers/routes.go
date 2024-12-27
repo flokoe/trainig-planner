@@ -12,5 +12,5 @@ func RegisterRoutes(mux *http.ServeMux, db *sql.DB) {
 	mux.HandleFunc("/plans/", handleViewPlan(db))
 	
 	// Sessions handlers
-	mux.HandleFunc("/sessions/new/", handleCreateSession(db))
+	mux.HandleFunc("/sessions/create/", handleCreateSession(db))
 }

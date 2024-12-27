@@ -14,7 +14,7 @@ func handleCreateSession(db *sql.DB) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Extract plan ID from URL
-		planID := strings.TrimPrefix(r.URL.Path, "/sessions/new/")
+		planID := strings.TrimPrefix(r.URL.Path, "/sessions/create/")
 		if planID == "" {
 			http.Error(w, "Plan ID is required", http.StatusBadRequest)
 			return
