@@ -106,6 +106,9 @@
             color: #666;
             font-size: 0.9em;
         }
+        .current-day {
+            background-color: #fff3e0 !important;
+        }
     </style>
 </head>
 <body>
@@ -138,7 +141,7 @@
         </tr>
         <tr>
             {{range .Days}}
-            <td>
+            <td {{if eq (now) (.Date.Format "2006-01-02")}}class="current-day"{{end}}>
                 <div class="date">{{.Date.Format "Jan 2"}}</div>
                 {{range .Sessions}}
                 <div class="session">
@@ -171,7 +174,7 @@
             <tr>
                 {{range $j := seq 0 6}}
                     {{$day := index $.MonthData.Days (add (multiply $i 7) $j)}}
-                    <td class="{{if not $day.IsCurrentMonth}}other-month{{end}}">
+                    <td class="{{if not $day.IsCurrentMonth}}other-month{{end}}{{if eq (now) ($day.Date.Format "2006-01-02")}} current-day{{end}}">
                         <div class="date">{{$day.Date.Format "2"}}</div>
                         {{range $day.Sessions}}
                             <div class="month-session">
