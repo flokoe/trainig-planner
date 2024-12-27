@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-routines = ['hamstring', 'hip', 'posture', 'shoulder']
+routines = ['Hamstring', 'Hip', 'Posture', 'Shoulder']
 weeks = range(1, 5)  # 1-4 weeks
 days = range(1, 4)   # 1-3 days per week
 
