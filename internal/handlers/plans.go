@@ -275,22 +275,46 @@ func handleViewPlan(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		// Get training sessions
+		// Get training sessions with type-specific details
 		rows, err := db.Query(`
-			SELECT id, session_order, description, date 
-			FROM training_sessions 
-			WHERE plan_id = ? 
-			ORDER BY session_order`, plan.ID)
+			SELECT 
+				ts.id, 
+				ts.session_order, 
+				ts.description, 
+				ts.date,
+				CASE 
+					WHEN cs.session_id IS NOT NULL THEN cs.hfmax
+					ELSE NULL
+				END as hfmax
+			FROM training_sessions ts
+			LEFT JOIN cycling_sessions cs ON ts.id = cs.session_id
+			LEFT JOIN mobility_sessions ms ON ts.id = ms.session_id
+			LEFT JOIN sandbag_sessions ss ON ts.id = ss.session_id
+			WHERE ts.plan_id = ? 
+			ORDER BY ts.session_order`, plan.ID)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		defer rows.Close()
 
-		var sessions []models.TrainingSession
+		var sessions []struct {
+			models.TrainingSession
+			HFMax *int `json:"hfmax,omitempty"`
+		}
+
 		for rows.Next() {
-			var session models.TrainingSession
-			if err := rows.Scan(&session.ID, &session.SessionOrder, &session.Description, &session.Date); err != nil {
+			var session struct {
+				models.TrainingSession
+				HFMax *int `json:"hfmax,omitempty"`
+			}
+			if err := rows.Scan(
+				&session.ID,
+				&session.SessionOrder,
+				&session.Description,
+				&session.Date,
+				&session.HFMax,
+			); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
@@ -298,13 +322,18 @@ func handleViewPlan(db *sql.DB) http.HandlerFunc {
 		}
 
 		data := struct {
-			Plan           models.TrainingPlan
+			Plan            models.TrainingPlan
 			WorkoutTypeName string
-			Sessions       []models.TrainingSession
+			Sessions        []struct {
+				models.TrainingSession
+				HFMax *int `json:"hfmax,omitempty"`
+			}
+			WorkoutTypeID   int64
 		}{
-			Plan:           plan,
+			Plan:            plan,
 			WorkoutTypeName: workoutTypeName,
-			Sessions:       sessions,
+			Sessions:        sessions,
+			WorkoutTypeID:   plan.WorkoutTypeID,
 		}
 
 		if err := tmpl.Execute(w, data); err != nil {

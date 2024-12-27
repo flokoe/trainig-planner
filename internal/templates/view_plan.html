@@ -17,6 +17,17 @@
             text-decoration: none;
             border-radius: 4px;
         }
+        .session-details {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .type-specific-details {
+            margin-top: 0.5rem;
+            font-style: italic;
+            color: #666;
+        }
     </style>
 </head>
 <body>
@@ -31,9 +42,16 @@
         {{if .Sessions}}
             <ul>
             {{range .Sessions}}
-                <li>
-                    {{.Date.Format "January 2, 2006"}}
+                <li class="session-details">
+                    <strong>{{.Date.Format "January 2, 2006"}}</strong>
                     <p>{{.Description}}</p>
+                    {{if eq $.WorkoutTypeID 1}} {{/* Cycling */}}
+                        {{if .HFMax}}
+                            <div class="type-specific-details">
+                                Heart Rate Max: {{.HFMax}} bpm
+                            </div>
+                        {{end}}
+                    {{end}}
                 </li>
             {{end}}
             </ul>
