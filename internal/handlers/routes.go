@@ -8,8 +8,7 @@ import (
 func RegisterRoutes(mux *http.ServeMux, db *sql.DB) {
 	// Plans handlers
 	mux.HandleFunc("/", listPlansHandler(db))
-	mux.HandleFunc("/plans/new", newPlanHandler(db))
-	mux.HandleFunc("/plans/create", createPlanHandler(db))
+	mux.HandleFunc("/plans/create", handleCreatePlan(db))
 	mux.HandleFunc("/plans/view/", viewPlanHandler(db))
 	
 	// Sessions handlers
