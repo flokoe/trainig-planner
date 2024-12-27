@@ -25,6 +25,8 @@ type CalendarData struct {
 	Days        []CalendarDay
 	CurrentWeek time.Time
 	WeekOffset  int
+	WeekNumber  int
+	Year        int
 }
 
 func handleCalendar(db *sql.DB) http.HandlerFunc {
@@ -99,10 +101,13 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 			}
 		}
 
+		year, week := monday.ISOWeek()
 		data := CalendarData{
 			Days:        days,
 			CurrentWeek: monday,
 			WeekOffset:  weekOffset,
+			WeekNumber:  week,
+			Year:        year,
 		}
 
 		if err := tmpl.Execute(w, data); err != nil {

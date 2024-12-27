@@ -99,7 +99,7 @@
         <a href="/?weekOffset={{add .WeekOffset 1}}">Next Week</a>
     </div>
     <div class="current-week">
-        <strong>Calendar Week {{$year := .CurrentWeek.ISOWeek}}{{index $year 1}} of {{index $year 0}}</strong>
+        <strong>Calendar Week {{.WeekNumber}} of {{.Year}}</strong>
     </div>
 
     <table class="calendar">
