@@ -141,7 +141,6 @@ func handleCalendar(db *sql.DB) http.HandlerFunc {
 
 		// Get the first day of the current month
 		firstOfMonth := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, now.Location())
-		lastOfMonth := firstOfMonth.AddDate(0, 1, -1)
 
 		// Get the first day to display (might be from previous month)
 		firstDisplayDay := firstOfMonth.AddDate(0, 0, -int(firstOfMonth.Weekday()))
