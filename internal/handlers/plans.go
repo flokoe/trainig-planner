@@ -80,6 +80,70 @@ func handleCreatePlan(db *sql.DB) http.HandlerFunc {
 	}
 }
 
+func handleListPlans(db *sql.DB) http.HandlerFunc {
+	tmpl := template.Must(template.ParseFiles("internal/templates/list_plans.html"))
+
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET" {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+
+		// Get all plans
+		rows, err := db.Query(`
+			SELECT id, name, workout_type_id, created_at 
+			FROM training_plans 
+			ORDER BY created_at DESC`)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		defer rows.Close()
+
+		var plans []models.TrainingPlan
+		for rows.Next() {
+			var plan models.TrainingPlan
+			if err := rows.Scan(&plan.ID, &plan.Name, &plan.WorkoutTypeID, &plan.CreatedAt); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			plans = append(plans, plan)
+		}
+
+		// Get all workout types to create a map of ID to name
+		workoutTypeRows, err := db.Query("SELECT id, name FROM workout_types")
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		defer workoutTypeRows.Close()
+
+		workoutTypeNames := make(map[int64]string)
+		for workoutTypeRows.Next() {
+			var id int64
+			var name string
+			if err := workoutTypeRows.Scan(&id, &name); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			workoutTypeNames[id] = name
+		}
+
+		data := struct {
+			Plans            []models.TrainingPlan
+			WorkoutTypeNames map[int64]string
+		}{
+			Plans:            plans,
+			WorkoutTypeNames: workoutTypeNames,
+		}
+
+		if err := tmpl.Execute(w, data); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+}
+
 func handleViewPlan(db *sql.DB) http.HandlerFunc {
 	tmpl := template.Must(template.ParseFiles("internal/templates/view_plan.html"))
 

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Training Plans</title>
+    <style>
+        .plans-list {
+            margin: 2rem 0;
+        }
+        .plan-item {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .create-button {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        .view-button {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Training Plans</h1>
+    <a href="/plans/create" class="create-button">Create New Plan</a>
+
+    <div class="plans-list">
+        {{if .Plans}}
+            {{range .Plans}}
+                <div class="plan-item">
+                    <h2>{{.Name}}</h2>
+                    <p>Workout Type: {{index $.WorkoutTypeNames .WorkoutTypeID}}</p>
+                    <p>Created: {{.CreatedAt.Format "January 2, 2006"}}</p>
+                    <a href="/plans/{{.ID}}" class="view-button">View Plan</a>
+                </div>
+            {{end}}
+        {{else}}
+            <p>No training plans created yet.</p>
+        {{end}}
+    </div>
+</body>
+</html>
